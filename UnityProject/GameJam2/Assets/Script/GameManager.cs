@@ -17,6 +17,14 @@ public class GameManager : MonoBehaviour
 
 	public static GameState GameState = GameState.Initialisation;
 
+	public GameObject P1;
+	public GameObject P2;
+	private PlayersManager P1Script;
+	private PlayersManager P2Script;
+
+	[Header("WinFinish")]
+	public GameObject FinishAngel;
+
 	[Header("UI")]
 	public GameObject PauseMenu;
 	public GameObject HUD;
@@ -27,12 +35,12 @@ public class GameManager : MonoBehaviour
 
 	void Start()
 	{
-
+		P1Script = P1.GetComponent<PlayersManager>();
+		P2Script = P2.GetComponent<PlayersManager>();
 	}
 
 	void Update()
 	{
-		Debug.Log(GameState);
 		switch (GameState)
 		{
 			case GameState.Initialisation:
@@ -47,6 +55,17 @@ public class GameManager : MonoBehaviour
 				break;
 			case GameState.InGame:
 				{
+					if (P1.transform.position.x > P2.transform.position.x)
+					{
+						P1Script.Leader = true;
+						P2Script.Leader = false;
+					}
+					else
+					{
+						P1Script.Leader = false;
+						P2Script.Leader = true;
+					}
+
 					if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.JoystickButton7))
 						GameState = GameState.InPause;
 				}
@@ -60,10 +79,8 @@ public class GameManager : MonoBehaviour
 				break;
 			case GameState.AngelWin:
 				{
-					WinScreens.SetActive(true);
-					AngelWin.SetActive(true);
-					Time.timeScale = 0.0f;
-					WinRestTime();
+					StartCoroutine(AngelWinCoroutine());
+
 				}
 				break;
 			case GameState.EvilWin:
@@ -71,7 +88,6 @@ public class GameManager : MonoBehaviour
 					WinScreens.SetActive(true);
 					EvilWin.SetActive(true);
 					Time.timeScale = 0.0f;
-					WinRestTime();
 				}
 				break;
 		}
@@ -85,15 +101,20 @@ public class GameManager : MonoBehaviour
 		PauseMenu.SetActive(false);
 	}
 
- 	public void ReturnMainMenu()
+	public void ReturnMainMenu()
 	{
 		SceneManager.LoadScene(0);
 	}
 
-	void WinRestTime()
+	IEnumerator AngelWinCoroutine()
 	{
-		WinScreenRestTime -= Time.unscaledDeltaTime;
-		if (WinScreenRestTime < 0.0f)
-			ReturnMainMenu();
+		Time.timeScale = 0.0f;
+		FinishAngel.SetActive(true);
+		yield return new WaitForSecondsRealtime(2.0f);
+		WinScreens.SetActive(true);
+		AngelWin.SetActive(true);
+		yield return new WaitForSecondsRealtime(WinScreenRestTime);
+		ReturnMainMenu();
+
 	}
 }
