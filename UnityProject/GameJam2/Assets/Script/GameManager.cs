@@ -14,13 +14,34 @@ public enum GameState
 }
 public class GameManager : MonoBehaviour
 {
+	static private GameManager current;
+	static public GameManager Current
+	{
+		get { return current; }
+	}
 
 	public static GameState GameState = GameState.Initialisation;
+	public bool EvilUP;
+
+	public GameObject WorldPivot;
+	private Animator worldPivotAnimator;
 
 	public GameObject P1;
 	public GameObject P2;
 	private PlayersManager P1Script;
 	private PlayersManager P2Script;
+	private Material P1AngelMat;
+	private Material P1EvilMat;
+	private Material P2AngelMat;
+	private Material P2EvilMat;
+	public GameObject P1Angel;
+	public GameObject P1Evil;
+	public GameObject P2Angel;
+	public GameObject P2Evil;
+
+	private List<Material> WallP1Mats;
+	private List<Material> WallP2Mats;
+	private float TimerBeforeRemovingWalls;
 
 	[Header("WinFinish")]
 	public GameObject FinishAngel;
@@ -35,8 +56,17 @@ public class GameManager : MonoBehaviour
 
 	void Start()
 	{
+		current = this;
+
 		P1Script = P1.GetComponent<PlayersManager>();
 		P2Script = P2.GetComponent<PlayersManager>();
+
+		P1AngelMat = P1Angel.GetComponent<MeshRenderer>().material;
+		P1EvilMat = P2Evil.GetComponent<MeshRenderer>().material;
+		P2AngelMat = P2Angel.GetComponent<MeshRenderer>().material;
+		P2EvilMat = P2Evil.GetComponent<MeshRenderer>().material;
+
+		worldPivotAnimator = WorldPivot.GetComponent<Animator>();
 	}
 
 	void Update()
@@ -55,6 +85,7 @@ public class GameManager : MonoBehaviour
 				break;
 			case GameState.InGame:
 				{
+
 					if (P1.transform.position.x > P2.transform.position.x)
 					{
 						P1Script.Leader = true;
@@ -116,5 +147,139 @@ public class GameManager : MonoBehaviour
 		yield return new WaitForSecondsRealtime(WinScreenRestTime);
 		ReturnMainMenu();
 
+	}
+
+	public void WallPlacingActivate(int PlayerNum)
+	{
+		if (PlayerNum == 1)
+		{
+			if (EvilUP)
+			{
+				GameObject wall = ObjectPooler.Instance.GrabFromPool("WallForP2", P1.transform.position + new Vector3(5.0f, 0.0f, 0.0f), Quaternion.identity);
+				WallsManager wallscript = wall.GetComponent<WallsManager>();
+				wallscript.playernum = 1;
+			}
+			else
+			{
+				GameObject wall = ObjectPooler.Instance.GrabFromPool("WallForP2", P2.transform.position + new Vector3(5.0f, 0.0f, 0.0f), Quaternion.identity);
+				WallsManager wallscript = wall.GetComponent<WallsManager>();
+				wallscript.playernum = 2;
+			}
+
+		}
+		else
+		{
+			if (EvilUP)
+			{
+				GameObject wall = ObjectPooler.Instance.GrabFromPool("WallForP2", P2.transform.position + new Vector3(5.0f, 0.0f, 0.0f), Quaternion.identity);
+				WallsManager wallscript = wall.GetComponent<WallsManager>();
+				wallscript.playernum = 2;
+			}
+			else
+			{
+				GameObject wall = ObjectPooler.Instance.GrabFromPool("WallForP2", P1.transform.position + new Vector3(5.0f, 0.0f, 0.0f), Quaternion.identity);
+				WallsManager wallscript = wall.GetComponent<WallsManager>();
+				wallscript.playernum = 1;
+			}
+		}
+	}
+
+	public IEnumerator SlowPlayer(int PlayerNum)
+	{
+		if (PlayerNum == 1)
+		{
+			float previousSpeed = P2Script.MoveSpeed;
+			P2Script.MoveSpeed *= 0.5f;
+			yield return new WaitForSeconds(4.0f);
+			P2Script.MoveSpeed = previousSpeed;
+		}
+		else
+		{
+			float previousSpeed = P1Script.MoveSpeed;
+			P1Script.MoveSpeed *= 0.5f;
+			yield return new WaitForSeconds(4.0f);
+			P1Script.MoveSpeed = previousSpeed;
+		}
+	}
+
+	public IEnumerator GoToEvilUp()
+	{
+
+		P1Angel.SetActive(false);
+		P1Evil.SetActive(true);
+		P2Angel.SetActive(true);
+		P2Evil.SetActive(false);
+		//Inverse XPos
+		float xPosP1 = P1.transform.position.x;
+		P1.transform.position = new Vector3(P2.transform.position.x, P1.transform.position.y, 0.0f);
+		P2.transform.position = new Vector3(xPosP1, P2.transform.position.y, 0.0f);
+		//Stop Move
+		P1Script.CanMove = false;
+		P2Script.CanMove = false;
+		//Swap controll
+		P1Script.PlayerNumber = 2;
+		P2Script.PlayerNumber = 1;
+		//Reverse world
+		worldPivotAnimator.SetInteger("EvilUp", 1);
+		worldPivotAnimator.SetInteger("EvilDown", 0);
+		yield return new WaitForSeconds(1.0f);
+		worldPivotAnimator.SetInteger("EvilUp", 0);
+		//Enable Move
+		P1Script.CanMove = true;
+		P2Script.CanMove = true;
+		yield return null;
+		EvilUP = true;
+
+		/*
+		//LaunchAnim
+		//	P1 angel->Evil + Dissolve + Effect
+		//	P2 Evil-> Angel + Dissolve + Effect
+		//Stop All player -> transform.position = transform.position
+		//Rotate World 
+		//Swap la position en X
+		Inverse PlayerNum
+			P1 -> 2
+			P2 -> 1
+		 */
+	}
+
+	public IEnumerator GoToEvilDown()
+	{
+		P1Angel.SetActive(true);
+		P1Evil.SetActive(false);
+		P2Angel.SetActive(false);
+		P2Evil.SetActive(true);
+		//Inverse XPos
+		float xPosP1 = P1.transform.position.x;
+		float xPosP2 = P2.transform.position.x;
+		P1.transform.position = new Vector3(xPosP2, P1.transform.position.y, 0.0f);
+		P2.transform.position = new Vector3(xPosP1, P2.transform.position.y, 0.0f);
+		//Stop Move
+		P1Script.CanMove = false;
+		P2Script.CanMove = false;
+		//Swap controll
+		P1Script.PlayerNumber = 1;
+		P2Script.PlayerNumber = 2;
+		//Reverse world
+		worldPivotAnimator.SetInteger("EvilDown", 1);
+		worldPivotAnimator.SetInteger("EvilUp", 0);
+		yield return new WaitForSeconds(1.0f);
+		worldPivotAnimator.SetInteger("EvilDown", 0);
+		//Enable Move
+		P1Script.CanMove = true;
+		P2Script.CanMove = true;
+		yield return null;
+		EvilUP = false;
+		/*
+		//LaunchAnim
+		//	P1 Evil->Angel + Dissolve + Effect
+		//	P2 Angel-> Evil + Dissolve + Effect
+		//Stop All player -> transform.position = transform.position
+		//Rotate World 
+		//Swap la position en X
+		//Inverse PlayerNum
+		//	P1 -> 1
+		//	P2 -> 2
+		 */
 	}
 }
