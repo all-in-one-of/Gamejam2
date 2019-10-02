@@ -28,7 +28,6 @@ public class WallsManager : MonoBehaviour
 
 	void Update()
 	{
-		Debug.Log(P2PowerUpActive);
 		if ((P1PowerUpActive && playernum == 1) || (P2PowerUpActive && playernum == 2))
 		{
 			normalWall.SetActive(false);

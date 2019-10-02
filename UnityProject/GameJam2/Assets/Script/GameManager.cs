@@ -30,14 +30,11 @@ public class GameManager : MonoBehaviour
 	public GameObject P2;
 	private PlayersManager P1Script;
 	private PlayersManager P2Script;
-	private Material P1AngelMat;
-	private Material P1EvilMat;
-	private Material P2AngelMat;
-	private Material P2EvilMat;
 	public GameObject P1Angel;
 	public GameObject P1Evil;
 	public GameObject P2Angel;
 	public GameObject P2Evil;
+	public List<GameObject> SlowEffects;
 
 	private List<Material> WallP1Mats;
 	private List<Material> WallP2Mats;
@@ -60,11 +57,6 @@ public class GameManager : MonoBehaviour
 
 		P1Script = P1.GetComponent<PlayersManager>();
 		P2Script = P2.GetComponent<PlayersManager>();
-
-		P1AngelMat = P1Angel.GetComponent<MeshRenderer>().material;
-		P1EvilMat = P2Evil.GetComponent<MeshRenderer>().material;
-		P2AngelMat = P2Angel.GetComponent<MeshRenderer>().material;
-		P2EvilMat = P2Evil.GetComponent<MeshRenderer>().material;
 
 		worldPivotAnimator = WorldPivot.GetComponent<Animator>();
 	}
@@ -155,15 +147,15 @@ public class GameManager : MonoBehaviour
 		{
 			if (EvilUP)
 			{
-				GameObject wall = ObjectPooler.Instance.GrabFromPool("WallForP2", P1.transform.position + new Vector3(5.0f, 0.0f, 0.0f), Quaternion.identity);
+				GameObject wall = ObjectPooler.Instance.GrabFromPool("WallForPN1", P1.transform.position + new Vector3(5.0f,1.0f, 0.0f), Quaternion.identity);
 				WallsManager wallscript = wall.GetComponent<WallsManager>();
-				wallscript.playernum = 1;
+				wallscript.playernum = 2;
 			}
 			else
 			{
-				GameObject wall = ObjectPooler.Instance.GrabFromPool("WallForP2", P2.transform.position + new Vector3(5.0f, 0.0f, 0.0f), Quaternion.identity);
+				GameObject wall = ObjectPooler.Instance.GrabFromPool("WallForPN2", P2.transform.position + new Vector3(5.0f, -1.0f, 0.0f), Quaternion.identity);
 				WallsManager wallscript = wall.GetComponent<WallsManager>();
-				wallscript.playernum = 2;
+				wallscript.playernum = 1;
 			}
 
 		}
@@ -171,15 +163,15 @@ public class GameManager : MonoBehaviour
 		{
 			if (EvilUP)
 			{
-				GameObject wall = ObjectPooler.Instance.GrabFromPool("WallForP2", P2.transform.position + new Vector3(5.0f, 0.0f, 0.0f), Quaternion.identity);
+				GameObject wall = ObjectPooler.Instance.GrabFromPool("WallForPN1", P2.transform.position + new Vector3(5.0f, -1.0f, 0.0f), Quaternion.identity);
 				WallsManager wallscript = wall.GetComponent<WallsManager>();
-				wallscript.playernum = 2;
+				wallscript.playernum = 1;
 			}
 			else
 			{
-				GameObject wall = ObjectPooler.Instance.GrabFromPool("WallForP2", P1.transform.position + new Vector3(5.0f, 0.0f, 0.0f), Quaternion.identity);
+				GameObject wall = ObjectPooler.Instance.GrabFromPool("WallForPN2", P1.transform.position + new Vector3(5.0f, 1.0f, 0.0f), Quaternion.identity);
 				WallsManager wallscript = wall.GetComponent<WallsManager>();
-				wallscript.playernum = 1;
+				wallscript.playernum = 2;
 			}
 		}
 	}
@@ -188,23 +180,42 @@ public class GameManager : MonoBehaviour
 	{
 		if (PlayerNum == 1)
 		{
+			if (EvilUP)
+				SlowEffects[3].SetActive(true);
+			else
+				SlowEffects[2].SetActive(true);
 			float previousSpeed = P2Script.MoveSpeed;
 			P2Script.MoveSpeed *= 0.5f;
 			yield return new WaitForSeconds(4.0f);
+			SlowEffects[2].SetActive(false);
+			SlowEffects[3].SetActive(false);
 			P2Script.MoveSpeed = previousSpeed;
 		}
 		else
 		{
+			if (EvilUP)
+				SlowEffects[0].SetActive(true);
+			else
+				SlowEffects[1].SetActive(true);
 			float previousSpeed = P1Script.MoveSpeed;
 			P1Script.MoveSpeed *= 0.5f;
 			yield return new WaitForSeconds(4.0f);
+			SlowEffects[0].SetActive(false);
+			SlowEffects[1].SetActive(false);
 			P1Script.MoveSpeed = previousSpeed;
 		}
 	}
 
 	public IEnumerator GoToEvilUp()
 	{
-
+		//Effect shield up
+		float value = 0.0f;
+		while (value <= 1.0f)
+		{
+			value += Mathf.Lerp(0.0f, 1.0f, 0.5f * Time.deltaTime);
+			Shader.SetGlobalFloat("AppearValue", value);
+			yield return null;
+		}
 		P1Angel.SetActive(false);
 		P1Evil.SetActive(true);
 		P2Angel.SetActive(true);
@@ -224,6 +235,14 @@ public class GameManager : MonoBehaviour
 		worldPivotAnimator.SetInteger("EvilDown", 0);
 		yield return new WaitForSeconds(1.0f);
 		worldPivotAnimator.SetInteger("EvilUp", 0);
+		//Effect shield Down
+		value = 0.0f;
+		while (value <= 1.0f)
+		{
+			value += Mathf.Lerp(0.0f, 1.0f, 0.5f * Time.deltaTime);
+			Shader.SetGlobalFloat("AppearValue", 1.0f - value);
+			yield return null;
+		}
 		//Enable Move
 		P1Script.CanMove = true;
 		P2Script.CanMove = true;

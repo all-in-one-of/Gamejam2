@@ -21,6 +21,8 @@ public class PlayersManager : MonoBehaviour
 	[Header("HUDRef")]
 	public Image Slot1PowerUp;
 	public Image Slot2PowerUp;
+	private Image PUS1;
+	private Image PUS2;
 	public List<Sprite> PowerUpSprite;
 	public Text TBF;
 	private int slot1Id;
@@ -47,6 +49,9 @@ public class PlayersManager : MonoBehaviour
 	{
 		lGameObject = gameObject;
 		lTransform = transform;
+
+		PUS1 = Slot1PowerUp.transform.GetChild(0).gameObject.GetComponent<Image>();
+		PUS2 = Slot2PowerUp.transform.GetChild(0).gameObject.GetComponent<Image>();
 
 		animator = GetComponent<Animator>();
 
@@ -75,11 +80,22 @@ public class PlayersManager : MonoBehaviour
 			PowerUp4();
 		}
 
+		if (GameManager.Current.EvilUP && PlayerNumber == 1 || PlayerNumber == 2 && !GameManager.Current.EvilUP)
+		{
+			Slot1PowerUp.color = Color.red;
+			Slot2PowerUp.color = Color.red;
+		}
+		else
+		{
+			Slot1PowerUp.color = Color.blue;
+			Slot2PowerUp.color = Color.blue;
+		}
+
 		Shader.SetGlobalVector("P" + PlayerNumber, lTransform.position);
 
 		if ((Input.GetKeyDown(KeyCode.A) && PlayerNumber == 2) || (Input.GetKeyDown(KeyCode.Keypad1) && PlayerNumber == 1) || (Input.GetKeyDown(L1)))
 		{
-			Slot1PowerUp.sprite = null;
+			PUS1.sprite = null;
 			switch (slot1Id)
 			{
 				case 1:
@@ -107,7 +123,7 @@ public class PlayersManager : MonoBehaviour
 		}
 		if ((Input.GetKeyDown(KeyCode.E) && PlayerNumber == 2) || (Input.GetKeyDown(KeyCode.Keypad2) && PlayerNumber == 1) || (Input.GetKeyDown(R1)))
 		{
-			Slot2PowerUp.sprite = null;
+			PUS2.sprite = null;
 			switch (slot2Id)
 			{
 				case 1:
@@ -156,7 +172,7 @@ public class PlayersManager : MonoBehaviour
 
 	IEnumerator RemovePowerUp2Effect()
 	{
-		yield return new WaitForSeconds(5.0f);
+		yield return new WaitForSeconds(1.0f);
 
 		if (PlayerNumber == 1)
 			WallsManager.P1PowerUpActive = false;
@@ -260,25 +276,21 @@ public class PlayersManager : MonoBehaviour
 		if (col.CompareTag("PowerUp1"))
 		{
 			ShowPowerUpInUI(PowerUpSprite[0], col, 1);
-			col.enabled = false;
 		}
 
 		if (col.CompareTag("PowerUp2"))
 		{
 			ShowPowerUpInUI(PowerUpSprite[1], col, 2);
-			col.enabled = false;
 		}
 
 		if (col.CompareTag("PowerUp3") && !Leader)
 		{
 			ShowPowerUpInUI(PowerUpSprite[2], col, 3);
-			col.enabled = false;
 		}
 
-		if (col.CompareTag("PowerUp2"))
+		if (col.CompareTag("PowerUp4"))
 		{
-			ShowPowerUpInUI(PowerUpSprite[2], col, 4);
-			col.enabled = false;
+			ShowPowerUpInUI(PowerUpSprite[3], col, 4);
 		}
 	}
 
@@ -293,16 +305,18 @@ public class PlayersManager : MonoBehaviour
 	void ShowPowerUpInUI(Sprite PowerUpToShow, Collider GoToDestroy, int PowerUpId)
 	{
 		GameObject go = GoToDestroy.gameObject;
-		if (Slot1PowerUp.sprite == null)
+		if (PUS1.sprite == null)
 		{
-			Slot1PowerUp.sprite = PowerUpToShow;
+			GoToDestroy.enabled = false;
+			PUS1.sprite = PowerUpToShow;
 			slot1Id = PowerUpId;
 			Destroy(go);
 			return;
 		}
-		else if (Slot2PowerUp.sprite == null)
+		else if (PUS2.sprite == null)
 		{
-			Slot2PowerUp.sprite = PowerUpToShow;
+			GoToDestroy.enabled = false;
+			PUS2.sprite = PowerUpToShow;
 			slot2Id = PowerUpId;
 			Destroy(go);
 			return;

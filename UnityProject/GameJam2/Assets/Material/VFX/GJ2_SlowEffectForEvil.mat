@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: GJ2_SlowEffect
+  m_Name: GJ2_SlowEffectForEvil
   m_Shader: {fileID: 4800000, guid: f2dfdf4445e95b44e9ebf7d2422d5dd2, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 0
@@ -40,7 +40,7 @@ Material:
     - _SmoothnessValue: 1
     - __dirty: 0
     m_Colors:
-    - _CloseColor: {r: 63.25359, g: 0, b: 0, a: 0}
+    - _CloseColor: {r: 9.103066, g: 0, b: 84.44851, a: 0}
     - _MainColor: {r: 0.21764706, g: 0.21764706, b: 0.21764706, a: 0}
     - _TillingSpeed: {r: 1, g: 5, b: 0, a: 2}
     - _Vector0: {r: 0, g: 1, b: 0, a: 0}
