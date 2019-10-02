@@ -1,0 +1,63 @@
+30/09/2019
+
+SetUP unity projet 30Min
+Script player 3H
+Main Menu 30min
+PauseMenu 10min
+Script Camera 10min
+Script GameManager 10min
+
+01/10/2019
+
+script player : 1:30h
+Script Gamemanager : 1h
+script PowerUp : 4:30h
+Tweeking Value : 1:3h
+VFX : Torch/Flamethrower 40min
+Réunion : 15min
+Shader (vfx) : 20min 
+VFX : Wall(houdini + shader) 15min 
+VFX : SlowHero 15min
+debug : (player, Gamemanager) 1h
+
+02/10/2019
+VFX : porte/PowerUp 0:30min
+Régler Tout les bugs :
+- Bug du flip (mur le fait que les mur était pas a la bonne  : 6:30h
+- Bug du PowerUp2 (passer à travers les murs) : 2h 
+
+
+LIST DES SPRITES:
+-MainMenu (normal,over,onclick)
+-Resume (normal,over,onclick)
+-Play (normal,over,onclick)
+-Option (normal,over,onclick)
+-Quit (normal,over,onclick)
+-Audio (normal,over,onclick)
+-Return (normal,over,onclick)
+-On (normal,over,onclick)
+-Off (normal,over,onclick)
+-SlideBar (emtpy,fill,cursor)
+
+-PauseMenu
+-Loading
+-MainVolume
+-MusicVolume
+-EnableAudio
+
+-Power1 : Placer un mur
+-Power2 : Passer à travers les murs
+-Power3 : Ralentir L'autre
+-Power4 : Inverser le monde
+
+
+
+TODO :
+Power Up;
+
+
+Swap Sprite lors du flip
+
+Integerer les anims;
+integrer les props;
+Level design;

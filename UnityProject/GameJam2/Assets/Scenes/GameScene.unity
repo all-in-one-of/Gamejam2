@@ -175,38 +175,6 @@ MonoBehaviour:
   AngelWin: {fileID: 1143312218}
   EvilWin: {fileID: 1113103347}
   WinScreenRestTime: 5
---- !u!84 &24185849
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 'Aura Directional Light : Shadow Map Render Texture'
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  m_Width: 512
-  m_Height: 512
-  m_AntiAliasing: 1
-  m_DepthFormat: 0
-  m_ColorFormat: 11
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
 --- !u!1 &30733155
 GameObject:
   m_ObjectHideFlags: 0
@@ -5180,7 +5148,7 @@ GameObject:
   m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &84436375
 Transform:
   m_ObjectHideFlags: 0
@@ -5305,7 +5273,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: ee2e4a0e4430d0b4a88e64949201027f, type: 3}
   PowerUp4UI: {fileID: 232980829}
   isGrounded: 0
-  JumpHeight: 10
+  JumpHeight: 75
   MoveSpeed: 8
   controller: {fileID: 0}
   gravityScale: 1
@@ -5420,7 +5388,7 @@ GameObject:
   - component: {fileID: 163708110}
   - component: {fileID: 163708109}
   m_Layer: 5
-  m_Name: Image (3)
+  m_Name: PowerUp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5458,7 +5426,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -5512,7 +5480,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1198299280}
-  m_RootOrder: 4
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!108 &176171564
 Light:
@@ -10218,11 +10186,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 200373640}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 12.29, y: -5.04, z: 0}
+  m_LocalPosition: {x: 0, y: -2.35, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1198299280}
-  m_RootOrder: 1
+  m_Father: {fileID: 1285183082}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!108 &200373642
 Light:
@@ -16722,7 +16690,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3935c3f7eed243a4aa3963f4febe6e6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Dir: {x: 2, y: 0, z: 0}
+  Dir: {x: 5, y: 0, z: 0}
 --- !u!114 &534669908
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22461,6 +22429,7 @@ Transform:
   m_Children:
   - {fileID: 1243673883}
   - {fileID: 320838120}
+  - {fileID: 1118809520}
   m_Father: {fileID: 2003167846}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -22626,6 +22595,38 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 778181850}
   m_PrefabAsset: {fileID: 0}
+--- !u!84 &806192070
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 'Aura Directional Light : Shadow Data Render Texture'
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  m_Width: 32
+  m_Height: 1
+  m_AntiAliasing: 1
+  m_DepthFormat: 0
+  m_ColorFormat: 11
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
 --- !u!114 &869249293
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -33360,11 +33361,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1118809519}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.76, y: -5.04, z: 0}
+  m_LocalPosition: {x: 0, y: -2.35, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1198299280}
-  m_RootOrder: 3
+  m_Father: {fileID: 735446276}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!108 &1118809521
 Light:
@@ -33469,6 +33470,7 @@ Transform:
   m_Children:
   - {fileID: 991030128}
   - {fileID: 524264447}
+  - {fileID: 1440583555}
   m_Father: {fileID: 2003167846}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -33827,10 +33829,6 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1440583555}
-  - {fileID: 200373641}
-  - {fileID: 2046424903}
-  - {fileID: 1118809520}
   - {fileID: 176171563}
   m_Father: {fileID: 695897003}
   m_RootOrder: 0
@@ -33993,6 +33991,7 @@ Transform:
   m_Children:
   - {fileID: 1463897643}
   - {fileID: 82541452}
+  - {fileID: 200373641}
   m_Father: {fileID: 2003167846}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -34068,6 +34067,38 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1285183081}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!84 &1293431519
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 'Aura Directional Light : Shadow Map Render Texture'
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  m_Width: 512
+  m_Height: 512
+  m_AntiAliasing: 1
+  m_DepthFormat: 0
+  m_ColorFormat: 11
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
 --- !u!1 &1384900457
 GameObject:
   m_ObjectHideFlags: 0
@@ -39061,11 +39092,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1440583554}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 4.63, y: -5.04, z: 0}
+  m_LocalPosition: {x: 0, y: -2.35, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1198299280}
-  m_RootOrder: 0
+  m_Father: {fileID: 1132180641}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!108 &1440583556
 Light:
@@ -39170,6 +39201,7 @@ Transform:
   m_Children:
   - {fileID: 587105865}
   - {fileID: 1441245797}
+  - {fileID: 2046424903}
   m_Father: {fileID: 2003167846}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -44964,13 +44996,13 @@ MonoBehaviour:
   overrideColor: 0
   overridingColor: {r: 1, g: 1, b: 1, a: 1}
   useShadow: 1
-  shadowMapRenderTexture: {fileID: 24185849}
+  shadowMapRenderTexture: {fileID: 1293431519}
   useCookie: 1
   cookieMapRenderTexture: {fileID: 0}
   enableOutOfPhaseColor: 0
   outOfPhaseColorStrength: 0.1
   outOfPhaseColor: {r: 0, g: 1, b: 1, a: 1}
-  shadowDataRenderTexture: {fileID: 1955955787}
+  shadowDataRenderTexture: {fileID: 806192070}
   customDistanceFalloffThreshold: 0.5
   customDistanceFalloffPower: 2
   customCookieDistanceFalloffStartThreshold: 0.1
@@ -45073,7 +45105,7 @@ GameObject:
   - component: {fileID: 1672349645}
   - component: {fileID: 1672349644}
   m_Layer: 5
-  m_Name: Image
+  m_Name: PowerUp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45111,7 +45143,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -45397,7 +45429,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: ee2e4a0e4430d0b4a88e64949201027f, type: 3}
   PowerUp4UI: {fileID: 464860323}
   isGrounded: 0
-  JumpHeight: 10
+  JumpHeight: 75
   MoveSpeed: 8
   controller: {fileID: 0}
   gravityScale: 1
@@ -45558,7 +45590,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!65 &1818227596
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -45758,7 +45790,7 @@ GameObject:
   - component: {fileID: 1834747575}
   - component: {fileID: 1834747574}
   m_Layer: 5
-  m_Name: Image (2)
+  m_Name: PowerUp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45796,7 +45828,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -45950,7 +45982,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3935c3f7eed243a4aa3963f4febe6e6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Dir: {x: 2, y: 0, z: 0}
+  Dir: {x: 5, y: 0, z: 0}
 --- !u!114 &1869044223
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -46345,38 +46377,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!84 &1955955787
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 'Aura Directional Light : Shadow Data Render Texture'
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  m_Width: 32
-  m_Height: 1
-  m_AntiAliasing: 1
-  m_DepthFormat: 0
-  m_ColorFormat: 11
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
 --- !u!1 &1981469100
 GameObject:
   m_ObjectHideFlags: 0
@@ -46746,10 +46746,10 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2046424902}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 20.01, y: -5.04, z: 0}
+  m_LocalPosition: {x: 0, y: -2.35, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1198299280}
+  m_Father: {fileID: 1440891065}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!108 &2046424904
@@ -46834,7 +46834,7 @@ GameObject:
   - component: {fileID: 2094103234}
   - component: {fileID: 2094103233}
   m_Layer: 5
-  m_Name: Image (1)
+  m_Name: PowerUp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46872,7 +46872,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:

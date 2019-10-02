@@ -59,6 +59,8 @@ public class GameManager : MonoBehaviour
 		P2Script = P2.GetComponent<PlayersManager>();
 
 		worldPivotAnimator = WorldPivot.GetComponent<Animator>();
+
+		Shader.SetGlobalFloat("AppearValue", 0);
 	}
 
 	void Update()

@@ -13,7 +13,7 @@ public class CameraController : MonoBehaviour
 		lTransform = transform;
 	}
 
-	void Update()
+	private void FixedUpdate()
 	{
 		lTransform.position += Dir * Time.deltaTime;
 	}

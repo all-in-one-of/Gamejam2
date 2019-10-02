@@ -20,6 +20,7 @@ public class PlayersManager : MonoBehaviour
 	private string crouchKey;
 	private string L1;
 	private string R1;
+	private string O;
 
 	[Header("HUDRef")]
 	public Image Slot1PowerUp;
@@ -64,6 +65,7 @@ public class PlayersManager : MonoBehaviour
 		crouchKey = "joystick " + PlayerNumber + " button 1";
 		L1 = "joystick " + PlayerNumber + " button 4";
 		R1 = "joystick " + PlayerNumber + " button 5";
+		O = "joystick " + PlayerNumber + " button 1";
 
 		//Physics
 		controller = GetComponent<Rigidbody>();
@@ -82,7 +84,7 @@ public class PlayersManager : MonoBehaviour
 		else
 			PowerUp4UI.enabled = true;
 
-		if (Input.GetKeyUp(KeyCode.S) && currentTimeBetweenFlip == 0.0f && !Leader)
+		if ((Input.GetKeyUp(KeyCode.S) && currentTimeBetweenFlip == 0.0f && !Leader) || (Input.GetKeyUp(O) && currentTimeBetweenFlip == 0.0f && !Leader))
 		{
 			currentTimeBetweenFlip = TimeBetweenFlip;
 			PowerUp4();
@@ -206,6 +208,10 @@ public class PlayersManager : MonoBehaviour
 	{
 		if (CanMove)
 		{
+			if (PositionToSend == "P1")
+			{
+				controller.AddForce(Physics.gravity * 20, ForceMode.Acceleration);
+			}
 
 			Vector3 moveDirection = Vector3.zero;
 
@@ -245,7 +251,7 @@ public class PlayersManager : MonoBehaviour
 			{
 				/*Vector3 gravity =  gravityScale * Vector3.up;
 				moveDirection += gravity;*/
-				controller.AddForce(-Physics.gravity, ForceMode.Acceleration);
+				controller.AddForce(-Physics.gravity * 20, ForceMode.Acceleration);
 			}
 			//controller.AddForce(gravity, ForceMode.Acceleration);
 			//if (!(controller.velocity.x > MoveSpeed || controller.velocity.x < -MoveSpeed))
