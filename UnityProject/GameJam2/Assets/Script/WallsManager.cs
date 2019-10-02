@@ -5,13 +5,14 @@ using UnityEngine;
 
 public class WallsManager : MonoBehaviour
 {
-	public static bool P1PowerUpActive;
-	public static bool P2PowerUpActive;
-	public int playernum;
+	public bool OpenWall;
 
 	private GameObject normalWall;
 	private GameObject powerUpWall;
-	private Material material;
+	public Material material;
+
+	public float ActiveTime = 5.0f;
+	private float activeTime;
 
 	private Transform ltransform;
 	private GameObject lGameObject;
@@ -24,15 +25,24 @@ public class WallsManager : MonoBehaviour
 		normalWall = ltransform.GetChild(0).gameObject;
 		powerUpWall = ltransform.GetChild(1).gameObject;
 		material = powerUpWall.GetComponent<MeshRenderer>().material;
+
+		activeTime = ActiveTime;
 	}
 
 	void Update()
 	{
-		if ((P1PowerUpActive && playernum == 1) || (P2PowerUpActive && playernum == 2))
+		if (OpenWall)
 		{
 			normalWall.SetActive(false);
 			powerUpWall.SetActive(true);
 			material.SetFloat("_BlastingRadius", 4);
+			activeTime -= Time.deltaTime;
+			if (activeTime <= 0.0f)
+			{
+				OpenWall = false;
+				activeTime = ActiveTime;
+			}
+
 		}
 	}
 
