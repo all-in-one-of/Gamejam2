@@ -25,6 +25,8 @@ public class GameManager : MonoBehaviour
 
 	public GameObject WorldPivot;
 	private Animator worldPivotAnimator;
+	public GameObject EvilLight;
+	public GameObject AngelLight;
 
 	public GameObject P1;
 	public GameObject P2;
