@@ -6,7 +6,6 @@ ShaderImporter:
   - _EVILNORMAL: {fileID: 2800000, guid: 358a22d793cc595419e3d1a5d3b74114, type: 3}
   - _ANGELNORMAL: {fileID: 2800000, guid: 358a22d793cc595419e3d1a5d3b74114, type: 3}
   - _EVILBASE: {fileID: 2800000, guid: 358a22d793cc595419e3d1a5d3b74114, type: 3}
-  - _ANGELBASE: {fileID: 2800000, guid: aa87dc0fcbd29aa4094bb04dc5136b03, type: 3}
   - _EVILSME: {fileID: 2800000, guid: 358a22d793cc595419e3d1a5d3b74114, type: 3}
   - _ANGELSME: {fileID: 2800000, guid: 358a22d793cc595419e3d1a5d3b74114, type: 3}
   nonModifiableTextures: []

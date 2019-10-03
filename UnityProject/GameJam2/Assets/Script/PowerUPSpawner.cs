@@ -40,6 +40,10 @@ public class PowerUPSpawner : MonoBehaviour
 		}
 		GameObject temp = Instantiate(PowerUpPrefabs[randomIndex],transform.position, Quaternion.identity);
 		temp.transform.parent = transform.parent;
+		if(GameManager.Current.EvilUP)
+		{
+			temp.transform.localRotation = Quaternion.Euler(0.0f,0.0f,0.0f);
+		}
 		PowerUpMove tempscript = temp.GetComponent<PowerUpMove>();
 		tempscript.Direction = Direction;
 		tempscript.DieAfter = DieAfter;

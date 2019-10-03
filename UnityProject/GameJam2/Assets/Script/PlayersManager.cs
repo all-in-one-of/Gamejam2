@@ -14,8 +14,6 @@ public class PlayersManager : MonoBehaviour
 	public LayerMask WallLayer;
 	private int WallLvalue;
 
-	[HideInInspector] public Animator animator;
-
 	private string jumpKey;
 	private string crouchKey;
 	private string L1;
@@ -61,8 +59,6 @@ public class PlayersManager : MonoBehaviour
 
 		WallLvalue = WallLayer.value;
 
-		animator = GetComponent<Animator>();
-
 		//Inputs
 		crouchKey = "joystick " + PlayerNumber + " button 1";
 
@@ -75,10 +71,24 @@ public class PlayersManager : MonoBehaviour
 		PUS1.color = new Color(1.0f, 1.0f, 1.0f, 0f);
 		PUS2.color = new Color(1.0f, 1.0f, 1.0f, 0f);
 
+		if (ChildAngel.activeSelf)
+			currentAnimator = ChildAngel.GetComponent<Animator>();
+		else if (ChildEvil.activeSelf)
+			currentAnimator = ChildEvil.GetComponent<Animator>();
+
 	}
 
 	void Update()
 	{
+
+		if (moveDirection != Vector3.zero)
+			AnimatorChange(1, 0, 0, 0, 0);
+		else
+			AnimatorChange(0, 1, 0, 0, 0);
+
+		if(!isGrounded)
+			AnimatorChange(0, 0, 0, 0, 1);
+
 		currentTimeBetweenFlip -= Time.deltaTime;
 		currentTimeBetweenFlip = Mathf.Max(currentTimeBetweenFlip, 0.0f);
 		PowerUp4UI.fillAmount = 1 - currentTimeBetweenFlip / TimeBetweenFlip;
@@ -102,6 +112,10 @@ public class PlayersManager : MonoBehaviour
 
 		if ((Input.GetKeyDown(KeyCode.A) && PlayerNumber == 2) || (Input.GetKeyDown(KeyCode.Keypad1) && PlayerNumber == 1) || (Input.GetKeyDown("joystick " + PlayerNumber + " button 4")))
 		{
+			if (moveDirection != Vector3.zero)
+				AnimatorChange(0, 0, 1, 0, 0);
+			else
+				AnimatorChange(0, 0, 0, 1, 0);
 			PUS1.sprite = null;
 			PUS1.color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
 			switch (slot1Id)
@@ -131,6 +145,10 @@ public class PlayersManager : MonoBehaviour
 		}
 		if ((Input.GetKeyDown(KeyCode.E) && PlayerNumber == 2) || (Input.GetKeyDown(KeyCode.Keypad2) && PlayerNumber == 1) || (Input.GetKeyDown("joystick " + PlayerNumber + " button 5")))
 		{
+			if (moveDirection != Vector3.zero)
+				AnimatorChange(0, 0, 1, 0, 0);
+			else
+				AnimatorChange(0, 0, 0, 1, 0);
 			PUS2.sprite = null;
 			PUS2.color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
 			switch (slot2Id)
@@ -214,6 +232,7 @@ public class PlayersManager : MonoBehaviour
 		}
 	}
 
+	Vector3 moveDirection = Vector3.zero;
 	void FixedUpdate()
 	{
 		if (CanMove)
@@ -223,7 +242,7 @@ public class PlayersManager : MonoBehaviour
 				controller.AddForce(Physics.gravity * 20, ForceMode.Acceleration);
 			}
 
-			Vector3 moveDirection = Vector3.zero;
+			moveDirection = Vector3.zero;
 
 			//Move-Left-Right
 			float HorizontalAxis = Input.GetAxis("Horizontal" + PlayerNumber);
@@ -232,7 +251,7 @@ public class PlayersManager : MonoBehaviour
 			else
 			if (HorizontalAxis < 0.0f)
 				transform.rotation = Quaternion.Euler(0.0f, 180.0f, 0.0f);
-				
+
 			Vector3 dir = new Vector3(HorizontalAxis, 0.0f, 0.0f);
 
 			if (PlayerNumber == 1 ? Input.GetKey(KeyCode.LeftArrow) : Input.GetKey(KeyCode.Q))
@@ -246,6 +265,7 @@ public class PlayersManager : MonoBehaviour
 			//Jump
 			if (Input.GetKey("joystick " + PlayerNumber + " button 0") && isGrounded)
 			{
+				
 				isGrounded = false;
 				if (PlayerNumber == 1)
 				{
@@ -271,9 +291,18 @@ public class PlayersManager : MonoBehaviour
 			}
 			//controller.AddForce(gravity, ForceMode.Acceleration);
 			//if (!(controller.velocity.x > MoveSpeed || controller.velocity.x < -MoveSpeed))
-			controller.MovePosition(lTransform.position + (moveDirection * MoveSpeed * Time.deltaTime));
 
+			controller.MovePosition(lTransform.position + (moveDirection * MoveSpeed * Time.deltaTime));
 		}
+	}
+
+	void AnimatorChange(int Run, int Idle, int CanPowerUpRun, int CanPowerUpIdle, int CanJump)
+	{
+		currentAnimator.SetInteger("CanRun", Run);
+		currentAnimator.SetInteger("CanIdle", Idle);
+		currentAnimator.SetInteger("CanPowerUpRun", CanPowerUpRun);
+		currentAnimator.SetInteger("CanPowerUpIdle", CanPowerUpIdle);
+		currentAnimator.SetInteger("CanJump", CanJump);
 	}
 
 	void OnTriggerEnter(Collider col)

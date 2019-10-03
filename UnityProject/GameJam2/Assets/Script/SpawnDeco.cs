@@ -10,8 +10,7 @@ public class SpawnDeco : MonoBehaviour
 	public float MinSpawnPoint;
 	public Transform parent;
 	public Vector3 ScaleVector;
-
-	public bool InverseRotationForCandle;
+	public bool Angel;
 
 	public int NumberSpawn;
 
@@ -34,7 +33,38 @@ public class SpawnDeco : MonoBehaviour
 			{
 				randomIndex = Random.Range(0, Prefabs.Length);
 			}
-			GameObject temp = Instantiate(Prefabs[randomIndex], RandomPosition[i], Quaternion.identity);
+			GameObject temp = Instantiate(Prefabs[randomIndex], RandomPosition[i] + (Angel? Vector3.up * .25f : Vector3.zero), Quaternion.identity);
+			if (Angel && Prefabs[randomIndex] == Prefabs[1])
+			{
+				if (parent.gameObject.name == "AngelDown")
+					temp.transform.rotation = Quaternion.Euler(0.0f, 90.0f, 0.0f);
+				else
+					temp.transform.rotation = Quaternion.Euler(0.0f, -90.0f, 0.0f);
+			}
+			else if (Prefabs[randomIndex] == Prefabs[0])
+			{
+				//Rotate de Maniere random 0/90/180
+				int rng;
+				rng = Random.Range(0, 3);
+				switch (rng)
+				{
+					case 0:
+						{
+							temp.transform.localRotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+						}
+						break;
+					case 1:
+						{
+							temp.transform.localRotation = Quaternion.Euler(0.0f, -90.0f, 0.0f);
+						}
+						break;
+					case 2:
+						{
+							temp.transform.localRotation = Quaternion.Euler(0.0f, 90.0f, 0.0f);
+						}
+						break;
+				}
+			}
 			temp.transform.parent = parent;
 			temp.transform.localScale = ScaleVector;
 			previousindex = randomIndex;

@@ -2,7 +2,10 @@ fileFormatVersion: 2
 guid: 05ddaaa5197b93942b9c44d4877baab6
 ShaderImporter:
   externalObjects: {}
-  defaultTextures: []
+  defaultTextures:
+  - _T_Porte_Normal: {fileID: 2800000, guid: 76b8076ed73093e45b9bdfc97ad146ef, type: 3}
+  - _T_Porte_Albedo: {fileID: 2800000, guid: 7d83ac80c3449d14084c507e715c0bee, type: 3}
+  - _T_Porte_SME: {fileID: 2800000, guid: 835e7742a6c7cf8418a0befe06ca944d, type: 3}
   nonModifiableTextures: []
   userData: 
   assetBundleName: 

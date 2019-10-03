@@ -32,7 +32,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - __dirty: 0
+    - __dirty: 1
     m_Colors:
     - _EffectColor: {r: 0, g: 0, b: 11.984314, a: 0}
     - _TilingSpeed: {r: 1, g: 1, b: 0.11, a: -1}

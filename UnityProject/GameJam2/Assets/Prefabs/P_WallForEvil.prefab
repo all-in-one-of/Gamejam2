@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   OpenWall: 0
+  material: {fileID: 0}
   ActiveTime: 5
 --- !u!1 &6118559640622619163
 GameObject:
@@ -187,7 +188,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 34870014ff6f41843884ac644525867e, type: 2}
+  - {fileID: 2100000, guid: 336ddc95e268e0643becdc483712ff53, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

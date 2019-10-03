@@ -71,6 +71,7 @@ Material:
     - _DstBlend: 0
     - _FPower: 4.58
     - _FScale: 8.69
+    - _Float0: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1

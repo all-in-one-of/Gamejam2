@@ -2,7 +2,10 @@ fileFormatVersion: 2
 guid: 9516d499a4857a145ad226626ec9eb6e
 ShaderImporter:
   externalObjects: {}
-  defaultTextures: []
+  defaultTextures:
+  - _T_Evil_Normal: {fileID: 2800000, guid: c2cf61c6cb223c74e8a27c1559694bc0, type: 3}
+  - _T_Evil_Albedo: {fileID: 2800000, guid: 17d87a4d4da47dc42b3e29bc7ac5b568, type: 3}
+  - _T_Evil_SME: {fileID: 2800000, guid: f9895bedfd00e7b48b66acd0a574df13, type: 3}
   nonModifiableTextures: []
   userData: 
   assetBundleName: 
