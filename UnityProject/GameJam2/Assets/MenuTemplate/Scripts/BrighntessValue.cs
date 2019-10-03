@@ -49,10 +49,10 @@ public class BrighntessValue : MonoBehaviour
         }
     }
 
-    private void OnRenderImage(RenderTexture source, RenderTexture destination)
+    /* private void OnRenderImage(RenderTexture source, RenderTexture destination)
     {
         material.SetFloat("_Brightness", menuManager.brightnessValueSlider.value);
-        material.SetFloat("_Gamma", 1f / menuManager.gammaValueSlider.value);
+       material.SetFloat("_Gamma", 1f / menuManager.gammaValueSlider.value);
         Graphics.Blit(source, destination, mat);
-    }
+	}*/
 }

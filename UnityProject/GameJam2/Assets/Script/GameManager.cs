@@ -1,8 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 
+using Aura2API;
+
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public enum GameState
 {
@@ -10,10 +13,12 @@ public enum GameState
 	InGame,
 	InPause,
 	AngelWin,
-	EvilWin
+	EvilWin,
+	RetrunToMain
 }
 public class GameManager : MonoBehaviour
 {
+
 	static private GameManager current;
 	static public GameManager Current
 	{
@@ -26,7 +31,11 @@ public class GameManager : MonoBehaviour
 	public GameObject WorldPivot;
 	private Animator worldPivotAnimator;
 	public GameObject EvilLight;
+	public GameObject EvilUpDeco;
+	public GameObject EvilDownDeco;
 	public GameObject AngelLight;
+	public GameObject AngelUpDeco;
+	public GameObject AngelDownDeco;
 
 	public GameObject P1;
 	public GameObject P2;
@@ -49,9 +58,18 @@ public class GameManager : MonoBehaviour
 	public GameObject PauseMenu;
 	public GameObject HUD;
 	public GameObject WinScreens;
-	public GameObject AngelWin;
-	public GameObject EvilWin;
+	public GameObject Win;
+	public Sprite AngelWin;
+	public Sprite EvilWin;
 	public float WinScreenRestTime;
+
+	public Sprite AngelRings;
+	public Sprite EvilRings;
+	public Sprite AngelWings;
+	public Sprite EvilWings;
+
+	public Image[] ReverseVisualU;
+	public Image[] ReverseVisualD;
 
 	void Start()
 	{
@@ -72,8 +90,7 @@ public class GameManager : MonoBehaviour
 			case GameState.Initialisation:
 				{
 					WinScreens.SetActive(false);
-					AngelWin.SetActive(false);
-					EvilWin.SetActive(false);
+					Win.SetActive(false);
 					PauseMenu.SetActive(false);
 					HUD.SetActive(true);
 					GameState = GameState.InGame;
@@ -107,17 +124,30 @@ public class GameManager : MonoBehaviour
 			case GameState.AngelWin:
 				{
 					StartCoroutine(AngelWinCoroutine());
-
 				}
 				break;
 			case GameState.EvilWin:
 				{
 					WinScreens.SetActive(true);
-					EvilWin.SetActive(true);
+					Win.SetActive(true);
+					Win.GetComponent<Image>().sprite = EvilWin;
 					Time.timeScale = 0.0f;
 				}
 				break;
 		}
+	}
+
+	IEnumerator AngelWinCoroutine()
+	{
+		Time.timeScale = 0.0f;
+		FinishAngel.SetActive(true);
+		yield return new WaitForSecondsRealtime(2.0f);
+		WinScreens.SetActive(true);
+		Win.SetActive(true);
+		Win.GetComponent<Image>().sprite = AngelWin;
+		yield return new WaitForSecondsRealtime(WinScreenRestTime);
+		ReturnMainMenu();
+
 	}
 
 	public void ResumeGame()
@@ -130,19 +160,14 @@ public class GameManager : MonoBehaviour
 
 	public void ReturnMainMenu()
 	{
-		SceneManager.LoadScene(0);
+		PauseMenu.SetActive(false);
+		GameState = GameState.RetrunToMain;
+		StartCoroutine(RMMenu());
 	}
-
-	IEnumerator AngelWinCoroutine()
+	public IEnumerator RMMenu()
 	{
-		Time.timeScale = 0.0f;
-		FinishAngel.SetActive(true);
 		yield return new WaitForSecondsRealtime(2.0f);
-		WinScreens.SetActive(true);
-		AngelWin.SetActive(true);
-		yield return new WaitForSecondsRealtime(WinScreenRestTime);
-		ReturnMainMenu();
-
+		SceneManager.LoadScene(0);
 	}
 
 	public void WallPlacingActivate(int PlayerNum)
@@ -216,6 +241,14 @@ public class GameManager : MonoBehaviour
 		P1Evil.SetActive(true);
 		P2Angel.SetActive(true);
 		P2Evil.SetActive(false);
+
+		AngelDownDeco.SetActive(true);
+		AngelUpDeco.SetActive(false);
+		AngelLight.transform.localRotation = Quaternion.Euler(115.0f, 0.0f, 0.0f);
+		EvilDownDeco.SetActive(false);
+		EvilUpDeco.SetActive(true);
+		EvilLight.transform.localRotation = Quaternion.Euler(-138.0f, 0.0f, 0.0f);
+
 		//Inverse XPos
 		float xPosP1 = P1.transform.position.x;
 		P1.transform.position = new Vector3(P2.transform.position.x, P1.transform.position.y, 0.0f);
@@ -231,10 +264,22 @@ public class GameManager : MonoBehaviour
 		worldPivotAnimator.SetInteger("EvilDown", 0);
 		yield return new WaitForSeconds(1.0f);
 
-		P1Script.Slot1PowerUp.color = Color.red;
-		P1Script.Slot2PowerUp.color = Color.red;
-		P2Script.Slot1PowerUp.color = Color.blue;
-		P2Script.Slot2PowerUp.color = Color.blue;
+		//Sprite Swap
+		P1Script.Slot1PowerUp.sprite = EvilRings;
+		P1Script.Slot2PowerUp.sprite = EvilRings;
+		P1Script.Slot1PowerUpHorn.sprite = EvilWings;
+		P1Script.Slot2PowerUpHorn.sprite = EvilWings;
+
+		ReverseVisualU[0].sprite = EvilRings;
+		ReverseVisualU[1].sprite = EvilWings;
+
+		P2Script.Slot1PowerUpHorn.sprite = AngelWings;
+		P2Script.Slot2PowerUpHorn.sprite = AngelWings;
+		P2Script.Slot1PowerUp.sprite = AngelRings;
+		P2Script.Slot2PowerUp.sprite = AngelRings;
+
+		ReverseVisualD[0].sprite = AngelRings;
+		ReverseVisualD[1].sprite = AngelWings;
 
 		worldPivotAnimator.SetInteger("EvilUp", 0);
 		//Effect shield Down
@@ -264,6 +309,13 @@ public class GameManager : MonoBehaviour
 			yield return null;
 		}
 
+		AngelDownDeco.SetActive(false);
+		AngelUpDeco.SetActive(true);
+		AngelLight.transform.localRotation = Quaternion.Euler(70.0f, 0.0f, 0.0f);
+		EvilDownDeco.SetActive(true);
+		EvilUpDeco.SetActive(false);
+		EvilLight.transform.localRotation = Quaternion.Euler(-48.0f, 0.0f, 0.0f);
+
 		P1Angel.SetActive(true);
 		P1Evil.SetActive(false);
 		P2Angel.SetActive(false);
@@ -284,10 +336,20 @@ public class GameManager : MonoBehaviour
 		worldPivotAnimator.SetInteger("EvilUp", 0);
 		yield return new WaitForSeconds(1.0f);
 
-		P2Script.Slot1PowerUp.color = Color.red;
-		P2Script.Slot2PowerUp.color = Color.red;
-		P1Script.Slot1PowerUp.color = Color.blue;
-		P1Script.Slot2PowerUp.color = Color.blue;
+		// Sprite Swap
+		P2Script.Slot1PowerUp.sprite = EvilRings;
+		P2Script.Slot2PowerUp.sprite = EvilRings;
+		P2Script.Slot1PowerUpHorn.sprite = EvilWings;
+		P2Script.Slot2PowerUpHorn.sprite = EvilWings;
+		ReverseVisualD[0].sprite = EvilWings;
+		ReverseVisualD[1].sprite = EvilWings;
+
+		P1Script.Slot1PowerUpHorn.sprite = AngelWings;
+		P1Script.Slot2PowerUpHorn.sprite = AngelWings;
+		P1Script.Slot1PowerUp.sprite = AngelRings;
+		P1Script.Slot2PowerUp.sprite = AngelRings;
+		ReverseVisualU[0].sprite = AngelRings;
+		ReverseVisualU[1].sprite = AngelWings;
 
 		worldPivotAnimator.SetInteger("EvilDown", 0);
 

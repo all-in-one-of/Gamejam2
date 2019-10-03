@@ -10,7 +10,7 @@ Material:
   m_Name: Mat_PowerUpSocket
   m_Shader: {fileID: 4800000, guid: d8a84cbdb7604c640a68a953d2c7b52c, type: 3}
   m_ShaderKeywords: 
-  m_LightmapFlags: 4
+  m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -18,7 +18,24 @@ Material:
   disabledShaderPasses: []
   m_SavedProperties:
     serializedVersion: 3
-    m_TexEnvs: []
+    m_TexEnvs:
+    - _Albedo:
+        m_Texture: {fileID: 2800000, guid: a83cb805d72365643abf168e7a9868e2, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalMap:
+        m_Texture: {fileID: 2800000, guid: bf807becdfa3dc146a041d80f5a6e6fa, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SME:
+        m_Texture: {fileID: 2800000, guid: 573918effe392e0448a66d296077693f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _texcoord:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Floats:
     - __dirty: 0
-    m_Colors: []
+    m_Colors:
+    - _EmissiveColor: {r: 0, g: 0, b: 0, a: 0}
