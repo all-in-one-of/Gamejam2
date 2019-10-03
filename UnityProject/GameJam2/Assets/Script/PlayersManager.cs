@@ -8,8 +8,11 @@ public class PlayersManager : MonoBehaviour
 {
 	[Header("MainParameters")]
 	public int PlayerNumber;
+	public string PositionToSend;
 	public bool Leader;
 	public bool CanMove;
+	public LayerMask WallLayer;
+	private int WallLvalue;
 
 	[HideInInspector] public Animator animator;
 
@@ -17,6 +20,7 @@ public class PlayersManager : MonoBehaviour
 	private string crouchKey;
 	private string L1;
 	private string R1;
+	private string O;
 
 	[Header("HUDRef")]
 	public Image Slot1PowerUp;
@@ -24,15 +28,14 @@ public class PlayersManager : MonoBehaviour
 	private Image PUS1;
 	private Image PUS2;
 	public List<Sprite> PowerUpSprite;
-	public Text TBF;
+	public Image PowerUp4UI;
 	private int slot1Id;
 	private int slot2Id;
 
 	[Header("PowerUp")]
-	public float PowerUpCD;
 	private int currentPowerNumber;
 	private float currentCD;
-	public float TimeBetweenFlip;
+	public static float TimeBetweenFlip = 10f;
 	private float currentTimeBetweenFlip;
 	[Header("Physics")]
 	public bool isGrounded;
@@ -50,6 +53,8 @@ public class PlayersManager : MonoBehaviour
 		lGameObject = gameObject;
 		lTransform = transform;
 
+		WallLvalue = WallLayer.value;
+
 		PUS1 = Slot1PowerUp.transform.GetChild(0).gameObject.GetComponent<Image>();
 		PUS2 = Slot2PowerUp.transform.GetChild(0).gameObject.GetComponent<Image>();
 
@@ -60,6 +65,7 @@ public class PlayersManager : MonoBehaviour
 		crouchKey = "joystick " + PlayerNumber + " button 1";
 		L1 = "joystick " + PlayerNumber + " button 4";
 		R1 = "joystick " + PlayerNumber + " button 5";
+		O = "joystick " + PlayerNumber + " button 1";
 
 		//Physics
 		controller = GetComponent<Rigidbody>();
@@ -72,26 +78,19 @@ public class PlayersManager : MonoBehaviour
 	{
 		currentTimeBetweenFlip -= Time.deltaTime;
 		currentTimeBetweenFlip = Mathf.Max(currentTimeBetweenFlip, 0.0f);
-		TBF.text = "Remaining time before you can use the flip PowerUP : " + currentTimeBetweenFlip.ToString("F2");
+		PowerUp4UI.fillAmount = 1 - currentTimeBetweenFlip / TimeBetweenFlip;
+		if (Leader)
+			PowerUp4UI.enabled = false;
+		else
+			PowerUp4UI.enabled = true;
 
-		if (Input.GetKeyUp(KeyCode.S) && PlayerNumber == 2 && currentTimeBetweenFlip == 0.0f)
+		if ((Input.GetKeyUp(KeyCode.S) && currentTimeBetweenFlip == 0.0f && !Leader) || (Input.GetKeyUp(O) && currentTimeBetweenFlip == 0.0f && !Leader))
 		{
 			currentTimeBetweenFlip = TimeBetweenFlip;
 			PowerUp4();
 		}
 
-		if (GameManager.Current.EvilUP && PlayerNumber == 1 || PlayerNumber == 2 && !GameManager.Current.EvilUP)
-		{
-			Slot1PowerUp.color = Color.red;
-			Slot2PowerUp.color = Color.red;
-		}
-		else
-		{
-			Slot1PowerUp.color = Color.blue;
-			Slot2PowerUp.color = Color.blue;
-		}
-
-		Shader.SetGlobalVector("P" + PlayerNumber, lTransform.position);
+		Shader.SetGlobalVector(PositionToSend, lTransform.position);
 
 		if ((Input.GetKeyDown(KeyCode.A) && PlayerNumber == 2) || (Input.GetKeyDown(KeyCode.Keypad1) && PlayerNumber == 1) || (Input.GetKeyDown(L1)))
 		{
@@ -157,27 +156,33 @@ public class PlayersManager : MonoBehaviour
 		GameManager.Current.WallPlacingActivate(PlayerNumber);
 	}
 
+	public List<GameObject> AllWall = new List<GameObject>();
 	//WallThrough
 	void PowerUp2()
 	{
-		if (PlayerNumber == 1)
-			WallsManager.P1PowerUpActive = true;
-		else
+		RaycastHit[] hits;
+		hits = Physics.RaycastAll(transform.position, transform.right, 20, WallLvalue);
+
+		for (int i = 0; i < hits.Length; i++)
 		{
-			WallsManager.P2PowerUpActive = true;
+			AllWall.Add(hits[i].transform.gameObject.transform.parent.gameObject);
 		}
 
-		StartCoroutine(RemovePowerUp2Effect());
+		for (int i = 0; i < AllWall.Count; i++)
+		{
+			WallsManager wallscript = AllWall[i].GetComponent<WallsManager>();
+			wallscript.OpenWall = true;
+			if (PlayerNumber == 1)
+				wallscript.material.SetInt("_Player1", 1);
+			else
+				wallscript.material.SetInt("_Player1", 0);
+		}
+		StartCoroutine(ClearList());
 	}
-
-	IEnumerator RemovePowerUp2Effect()
+	IEnumerator ClearList()
 	{
-		yield return new WaitForSeconds(1.0f);
-
-		if (PlayerNumber == 1)
-			WallsManager.P1PowerUpActive = false;
-		else
-			WallsManager.P2PowerUpActive = false;
+		yield return new WaitForSeconds(3.0f);
+		AllWall.Clear();
 	}
 
 	//Slow 
@@ -203,6 +208,10 @@ public class PlayersManager : MonoBehaviour
 	{
 		if (CanMove)
 		{
+			if (PositionToSend == "P1")
+			{
+				controller.AddForce(Physics.gravity * 20, ForceMode.Acceleration);
+			}
 
 			Vector3 moveDirection = Vector3.zero;
 
@@ -242,7 +251,7 @@ public class PlayersManager : MonoBehaviour
 			{
 				/*Vector3 gravity =  gravityScale * Vector3.up;
 				moveDirection += gravity;*/
-				controller.AddForce(-Physics.gravity, ForceMode.Acceleration);
+				controller.AddForce(-Physics.gravity * 20, ForceMode.Acceleration);
 			}
 			//controller.AddForce(gravity, ForceMode.Acceleration);
 			//if (!(controller.velocity.x > MoveSpeed || controller.velocity.x < -MoveSpeed))

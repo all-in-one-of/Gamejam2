@@ -59,6 +59,8 @@ public class GameManager : MonoBehaviour
 		P2Script = P2.GetComponent<PlayersManager>();
 
 		worldPivotAnimator = WorldPivot.GetComponent<Animator>();
+
+		Shader.SetGlobalFloat("AppearValue", 0);
 	}
 
 	void Update()
@@ -143,35 +145,27 @@ public class GameManager : MonoBehaviour
 
 	public void WallPlacingActivate(int PlayerNum)
 	{
-		if (PlayerNum == 1)
+		GameObject wall;
+		if (P1Script.transform.GetChild(0).gameObject.activeSelf && P2Script.transform.GetChild(1).gameObject.activeSelf)
 		{
-			if (EvilUP)
+			if (PlayerNum == 1)
 			{
-				GameObject wall = ObjectPooler.Instance.GrabFromPool("WallForPN1", P1.transform.position + new Vector3(5.0f,1.0f, 0.0f), Quaternion.identity);
-				WallsManager wallscript = wall.GetComponent<WallsManager>();
-				wallscript.playernum = 2;
+				wall = ObjectPooler.Instance.GrabFromPool("WallForEvil", new Vector3(P2.transform.position.x + 5.0f, 0.0f, 0.0f), Quaternion.Euler(180.0f, 0.0f, 0.0f));
 			}
 			else
 			{
-				GameObject wall = ObjectPooler.Instance.GrabFromPool("WallForPN2", P2.transform.position + new Vector3(5.0f, -1.0f, 0.0f), Quaternion.identity);
-				WallsManager wallscript = wall.GetComponent<WallsManager>();
-				wallscript.playernum = 1;
+				wall = ObjectPooler.Instance.GrabFromPool("WallForAngel", new Vector3(P1.transform.position.x + 5.0f, 0.1f, 0.0f), Quaternion.identity);
 			}
-
 		}
 		else
 		{
-			if (EvilUP)
+			if (PlayerNum == 1)
 			{
-				GameObject wall = ObjectPooler.Instance.GrabFromPool("WallForPN1", P2.transform.position + new Vector3(5.0f, -1.0f, 0.0f), Quaternion.identity);
-				WallsManager wallscript = wall.GetComponent<WallsManager>();
-				wallscript.playernum = 1;
+				wall = ObjectPooler.Instance.GrabFromPool("WallForEvil", new Vector3(P1.transform.position.x + 5.0f, 0.1f, 0.0f), Quaternion.identity);
 			}
 			else
 			{
-				GameObject wall = ObjectPooler.Instance.GrabFromPool("WallForPN2", P1.transform.position + new Vector3(5.0f, 1.0f, 0.0f), Quaternion.identity);
-				WallsManager wallscript = wall.GetComponent<WallsManager>();
-				wallscript.playernum = 2;
+				wall = ObjectPooler.Instance.GrabFromPool("WallForAngel", new Vector3(P2.transform.position.x + 5.0f, 0.0f, 0.0f), Quaternion.Euler(180.0f, 0.0f, 0.0f));
 			}
 		}
 	}
@@ -234,6 +228,12 @@ public class GameManager : MonoBehaviour
 		worldPivotAnimator.SetInteger("EvilUp", 1);
 		worldPivotAnimator.SetInteger("EvilDown", 0);
 		yield return new WaitForSeconds(1.0f);
+
+		P1Script.Slot1PowerUp.color = Color.red;
+		P1Script.Slot2PowerUp.color = Color.red;
+		P2Script.Slot1PowerUp.color = Color.blue;
+		P2Script.Slot2PowerUp.color = Color.blue;
+
 		worldPivotAnimator.SetInteger("EvilUp", 0);
 		//Effect shield Down
 		value = 0.0f;
@@ -249,21 +249,19 @@ public class GameManager : MonoBehaviour
 		yield return null;
 		EvilUP = true;
 
-		/*
-		//LaunchAnim
-		//	P1 angel->Evil + Dissolve + Effect
-		//	P2 Evil-> Angel + Dissolve + Effect
-		//Stop All player -> transform.position = transform.position
-		//Rotate World 
-		//Swap la position en X
-		Inverse PlayerNum
-			P1 -> 2
-			P2 -> 1
-		 */
 	}
 
 	public IEnumerator GoToEvilDown()
 	{
+		//Effect shield up
+		float value = 0.0f;
+		while (value <= 1.0f)
+		{
+			value += Mathf.Lerp(0.0f, 1.0f, 0.5f * Time.deltaTime);
+			Shader.SetGlobalFloat("AppearValue", value);
+			yield return null;
+		}
+
 		P1Angel.SetActive(true);
 		P1Evil.SetActive(false);
 		P2Angel.SetActive(false);
@@ -283,22 +281,27 @@ public class GameManager : MonoBehaviour
 		worldPivotAnimator.SetInteger("EvilDown", 1);
 		worldPivotAnimator.SetInteger("EvilUp", 0);
 		yield return new WaitForSeconds(1.0f);
+
+		P2Script.Slot1PowerUp.color = Color.red;
+		P2Script.Slot2PowerUp.color = Color.red;
+		P1Script.Slot1PowerUp.color = Color.blue;
+		P1Script.Slot2PowerUp.color = Color.blue;
+
 		worldPivotAnimator.SetInteger("EvilDown", 0);
+
+		//Effect shield Down
+		value = 0.0f;
+		while (value <= 1.0f)
+		{
+			value += Mathf.Lerp(0.0f, 1.0f, 0.5f * Time.deltaTime);
+			Shader.SetGlobalFloat("AppearValue", 1.0f - value);
+			yield return null;
+		}
+
 		//Enable Move
 		P1Script.CanMove = true;
 		P2Script.CanMove = true;
 		yield return null;
 		EvilUP = false;
-		/*
-		//LaunchAnim
-		//	P1 Evil->Angel + Dissolve + Effect
-		//	P2 Angel-> Evil + Dissolve + Effect
-		//Stop All player -> transform.position = transform.position
-		//Rotate World 
-		//Swap la position en X
-		//Inverse PlayerNum
-		//	P1 -> 1
-		//	P2 -> 2
-		 */
 	}
 }

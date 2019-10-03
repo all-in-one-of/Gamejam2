@@ -1,0 +1,93 @@
+https://desktop.github.com/ 
+
+https://github.com/thamex/GameJam1.git
+
+https://github.com/thamex/Gamejam2.git
+
+https://unity3d.com/fr/get-unity/download?thank-you=update&download_nid=62614&os=Win
+
+
+
+	int index = 0;
+	public void WallPlacingActivate(int PlayerNum)
+	{
+		if (PlayerNum == 1)
+		{
+			for (int i = 0; i < WallP2.Count; i++)
+			{
+				IsUsed wallscript = WallP1[i].GetComponent<IsUsed>();
+				if (wallscript.IsUse)
+				{
+					index++;
+				}
+				else
+				{
+					wallscript.IsUse = true;
+					return;
+				}
+			}
+			GameObject currentwall = WallP2[index];
+			Material currentMat = currentwall.transform.GetChild(1).GetComponent<MeshRenderer>().material;
+			currentwall.SetActive(true);
+			currentwall.transform.position = P2.transform.position + new Vector3(5.0f,1.0f,0.0f);
+			WallsP2Mats.Add(currentMat);
+		}
+		else
+		{
+			for (int i = 0; i < WallP1.Count; i++)
+			{
+				IsUsed wallscript = WallP1[i].GetComponent<IsUsed>();
+				if (wallscript.IsUse)
+				{
+					index++;
+				}
+				else
+				{
+					wallscript.IsUse = true;
+					return;
+				}
+			}
+			GameObject currentwall = WallP1[index];
+			Material currentMat = currentwall.transform.GetChild(1).GetComponent<MeshRenderer>().material;
+			currentwall.SetActive(true);
+			currentwall.transform.position = P1.transform.position + new Vector3(5.0f,-1.0f,0.0f);
+			WallsP1Mats.Add(currentMat);
+		}
+	}
+
+	public IEnumerator GoThroughWallPowerUP(int PlayerNum)
+	{
+		if (PlayerNum == 1)
+		{
+			for (int i = 0; i < WallP1.Count; i++)
+			{
+				WallP1[i].transform.GetChild(0).gameObject.SetActive(false);
+				WallP1[i].transform.GetChild(1).gameObject.SetActive(true);
+				WallsP1Mats[i].SetFloat("_BlastRadius", 4);
+			}
+			yield return new WaitForSeconds(4.0f);
+			for (int i = 0; i < WallP1.Count; i++)
+			{
+				WallP1[i].transform.GetChild(0).gameObject.SetActive(true);
+				WallP1[i].transform.GetChild(1).gameObject.SetActive(false);
+				WallsP1Mats[i].SetFloat("_BlastRadius", 1);
+			}
+		}
+		else
+		{
+			for (int i = 0; i < WallP2.Count; i++)
+			{
+				WallP2[i].transform.GetChild(0).gameObject.SetActive(false);
+				WallP2[i].transform.GetChild(1).gameObject.SetActive(true);
+				WallsP2Mats[i].SetFloat("_BlastRadius", 4);
+			}
+			yield return new WaitForSeconds(4.0f);
+			for (int i = 0; i < WallP1.Count; i++)
+			{
+				WallP1[i].transform.GetChild(0).gameObject.SetActive(false);
+				WallP1[i].transform.GetChild(1).gameObject.SetActive(true);
+				WallsP1Mats[i].SetFloat("_BlastRadius", 1);
+			}
+		}
+		yield return new WaitForSeconds(5.0f);
+	}
