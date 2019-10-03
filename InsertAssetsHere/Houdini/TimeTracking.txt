@@ -39,16 +39,20 @@ LIST DES SPRITES:
 -Off (normal,over,onclick)
 -SlideBar (emtpy,fill,cursor)
 
+-Power1 : Placer un mur
+-Power2 : Passer à travers les murs
+-Power3 : Ralentir L'autre
+-Power4 : Inverser le monde
+
+
+
+
 -PauseMenu
 -Loading
 -MainVolume
 -MusicVolume
 -EnableAudio
 
--Power1 : Placer un mur
--Power2 : Passer à travers les murs
--Power3 : Ralentir L'autre
--Power4 : Inverser le monde
 
 
 
