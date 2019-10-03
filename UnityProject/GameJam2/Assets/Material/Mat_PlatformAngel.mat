@@ -10,7 +10,7 @@ Material:
   m_Name: Mat_PlatformAngel
   m_Shader: {fileID: 4800000, guid: d8a84cbdb7604c640a68a953d2c7b52c, type: 3}
   m_ShaderKeywords: 
-  m_LightmapFlags: 4
+  m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -18,7 +18,24 @@ Material:
   disabledShaderPasses: []
   m_SavedProperties:
     serializedVersion: 3
-    m_TexEnvs: []
+    m_TexEnvs:
+    - _Albedo:
+        m_Texture: {fileID: 2800000, guid: 40edb56aa28210c41890024c1f7c51de, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalMap:
+        m_Texture: {fileID: 2800000, guid: a7a092715adcee1499b765084aec274f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SME:
+        m_Texture: {fileID: 2800000, guid: 002b79a3a95e69c4b8abf0ada666c2e1, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _texcoord:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Floats:
-    - __dirty: 0
-    m_Colors: []
+    - __dirty: 1
+    m_Colors:
+    - _EmissiveColor: {r: 0, g: 0, b: 0, a: 0}

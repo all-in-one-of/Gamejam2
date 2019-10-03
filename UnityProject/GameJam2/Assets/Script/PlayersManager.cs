@@ -24,9 +24,11 @@ public class PlayersManager : MonoBehaviour
 
 	[Header("HUDRef")]
 	public Image Slot1PowerUp;
+	public Image Slot1PowerUpHorn;
 	public Image Slot2PowerUp;
-	private Image PUS1;
-	private Image PUS2;
+	public Image Slot2PowerUpHorn;
+	public Image PUS1;
+	public Image PUS2;
 	public List<Sprite> PowerUpSprite;
 	public Image PowerUp4UI;
 	private int slot1Id;
@@ -48,6 +50,10 @@ public class PlayersManager : MonoBehaviour
 	private Transform lTransform;
 	private GameObject lGameObject;
 
+	private Animator currentAnimator;
+	public GameObject ChildAngel;
+	public GameObject ChildEvil;
+
 	void Start()
 	{
 		lGameObject = gameObject;
@@ -55,23 +61,20 @@ public class PlayersManager : MonoBehaviour
 
 		WallLvalue = WallLayer.value;
 
-		PUS1 = Slot1PowerUp.transform.GetChild(0).gameObject.GetComponent<Image>();
-		PUS2 = Slot2PowerUp.transform.GetChild(0).gameObject.GetComponent<Image>();
-
 		animator = GetComponent<Animator>();
 
 		//Inputs
-		jumpKey = "joystick " + PlayerNumber + " button 0";
 		crouchKey = "joystick " + PlayerNumber + " button 1";
-		L1 = "joystick " + PlayerNumber + " button 4";
-		R1 = "joystick " + PlayerNumber + " button 5";
-		O = "joystick " + PlayerNumber + " button 1";
 
 		//Physics
 		controller = GetComponent<Rigidbody>();
 		//controller.useGravity = false;
 
 		currentTimeBetweenFlip = TimeBetweenFlip;
+
+		PUS1.color = new Color(1.0f, 1.0f, 1.0f, 0f);
+		PUS2.color = new Color(1.0f, 1.0f, 1.0f, 0f);
+
 	}
 
 	void Update()
@@ -84,7 +87,12 @@ public class PlayersManager : MonoBehaviour
 		else
 			PowerUp4UI.enabled = true;
 
-		if ((Input.GetKeyUp(KeyCode.S) && currentTimeBetweenFlip == 0.0f && !Leader) || (Input.GetKeyUp(O) && currentTimeBetweenFlip == 0.0f && !Leader))
+		if (ChildAngel.activeSelf)
+			currentAnimator = ChildAngel.GetComponent<Animator>();
+		else if (ChildEvil.activeSelf)
+			currentAnimator = ChildEvil.GetComponent<Animator>();
+
+		if ((Input.GetKeyUp(KeyCode.S) && currentTimeBetweenFlip == 0.0f && !Leader) || (Input.GetKeyUp("joystick " + PlayerNumber + " button 1") && currentTimeBetweenFlip == 0.0f && !Leader))
 		{
 			currentTimeBetweenFlip = TimeBetweenFlip;
 			PowerUp4();
@@ -92,9 +100,10 @@ public class PlayersManager : MonoBehaviour
 
 		Shader.SetGlobalVector(PositionToSend, lTransform.position);
 
-		if ((Input.GetKeyDown(KeyCode.A) && PlayerNumber == 2) || (Input.GetKeyDown(KeyCode.Keypad1) && PlayerNumber == 1) || (Input.GetKeyDown(L1)))
+		if ((Input.GetKeyDown(KeyCode.A) && PlayerNumber == 2) || (Input.GetKeyDown(KeyCode.Keypad1) && PlayerNumber == 1) || (Input.GetKeyDown("joystick " + PlayerNumber + " button 4")))
 		{
 			PUS1.sprite = null;
+			PUS1.color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
 			switch (slot1Id)
 			{
 				case 1:
@@ -120,9 +129,10 @@ public class PlayersManager : MonoBehaviour
 			}
 			slot1Id = 0;
 		}
-		if ((Input.GetKeyDown(KeyCode.E) && PlayerNumber == 2) || (Input.GetKeyDown(KeyCode.Keypad2) && PlayerNumber == 1) || (Input.GetKeyDown(R1)))
+		if ((Input.GetKeyDown(KeyCode.E) && PlayerNumber == 2) || (Input.GetKeyDown(KeyCode.Keypad2) && PlayerNumber == 1) || (Input.GetKeyDown("joystick " + PlayerNumber + " button 5")))
 		{
 			PUS2.sprite = null;
+			PUS2.color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
 			switch (slot2Id)
 			{
 				case 1:
@@ -217,6 +227,12 @@ public class PlayersManager : MonoBehaviour
 
 			//Move-Left-Right
 			float HorizontalAxis = Input.GetAxis("Horizontal" + PlayerNumber);
+			if (HorizontalAxis > 0.0f)
+				transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+			else
+			if (HorizontalAxis < 0.0f)
+				transform.rotation = Quaternion.Euler(0.0f, 180.0f, 0.0f);
+				
 			Vector3 dir = new Vector3(HorizontalAxis, 0.0f, 0.0f);
 
 			if (PlayerNumber == 1 ? Input.GetKey(KeyCode.LeftArrow) : Input.GetKey(KeyCode.Q))
@@ -228,7 +244,7 @@ public class PlayersManager : MonoBehaviour
 			moveDirection = dir;
 
 			//Jump
-			if ((Input.GetKeyDown(jumpKey) || PlayerNumber == 1 ? Input.GetKey(KeyCode.UpArrow) : Input.GetKey(KeyCode.Z)) && isGrounded)
+			if (Input.GetKey("joystick " + PlayerNumber + " button 0") && isGrounded)
 			{
 				isGrounded = false;
 				if (PlayerNumber == 1)
@@ -319,6 +335,7 @@ public class PlayersManager : MonoBehaviour
 			GoToDestroy.enabled = false;
 			PUS1.sprite = PowerUpToShow;
 			slot1Id = PowerUpId;
+			PUS1.color = new Color(1.0f, 1.0f, 1.0f, 1f);
 			Destroy(go);
 			return;
 		}
@@ -327,6 +344,7 @@ public class PlayersManager : MonoBehaviour
 			GoToDestroy.enabled = false;
 			PUS2.sprite = PowerUpToShow;
 			slot2Id = PowerUpId;
+			PUS2.color = new Color(1.0f, 1.0f, 1.0f, 1f);
 			Destroy(go);
 			return;
 		}

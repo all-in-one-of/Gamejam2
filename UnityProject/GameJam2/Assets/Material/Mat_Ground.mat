@@ -19,6 +19,30 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _ANGELBASE:
+        m_Texture: {fileID: 2800000, guid: 8cb668050ae62c34a98e834356acc265, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ANGELNORMAL:
+        m_Texture: {fileID: 2800000, guid: 5d6ac5d4c73cec44e9a98e2118dd2a96, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ANGELSME:
+        m_Texture: {fileID: 2800000, guid: 4e118d26fd226644b9b7bfa1881b7cee, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EVILBASE:
+        m_Texture: {fileID: 2800000, guid: 41a6dcd3a75e5174ca075634ecb266db, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EVILNORMAL:
+        m_Texture: {fileID: 2800000, guid: 220bd8adda3cae243a37d33348c992e6, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EVILSME:
+        m_Texture: {fileID: 2800000, guid: 2542e9aecdc769f41a7c84dd00f7eebf, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _T_Lave_Albedo:
         m_Texture: {fileID: 2800000, guid: 358a22d793cc595419e3d1a5d3b74114, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -35,11 +59,20 @@ Material:
         m_Texture: {fileID: 2800000, guid: 37050f958641f4245a3e46f24185aa86, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _TextureSample2:
+        m_Texture: {fileID: 2800000, guid: 4e118d26fd226644b9b7bfa1881b7cee, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TextureSample3:
+        m_Texture: {fileID: 2800000, guid: 5d6ac5d4c73cec44e9a98e2118dd2a96, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _texcoord:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - _AngelNormalScale: 0.5
     - __dirty: 0
     m_Colors:
     - _Color0: {r: 0, g: 0, b: 1, a: 0}
