@@ -200,7 +200,7 @@ public class PlayersManager : MonoBehaviour
 		{
 			WallsManager wallscript = AllWall[i].GetComponent<WallsManager>();
 			wallscript.OpenWall = true;
-			if (PlayerNumber == 1)
+			if (PositionToSend == "P1")
 				wallscript.material.SetInt("_Player1", 1);
 			else
 				wallscript.material.SetInt("_Player1", 0);
