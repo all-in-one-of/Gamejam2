@@ -59,7 +59,7 @@ public class PlayersManager : MonoBehaviour
 
 	void TakePowerSound()
 	{
-		if (GameManager.Current.EvilUP && PositionToSend == "P1")
+		if (ChildEvil.activeSelf)
 			Instantiate(PowerUpTakeSoundEvil, transform.position, Quaternion.identity);
 		else
 			Instantiate(PowerUpTakeSoundAngel, transform.position, Quaternion.identity);
@@ -67,7 +67,8 @@ public class PlayersManager : MonoBehaviour
 
 	void UsePowerSound()
 	{
-		if (GameManager.Current.EvilUP && PositionToSend == "P1")
+		Debug.Log("Yo");
+		if (ChildEvil.activeSelf)
 			Instantiate(PowerUpUseSoundEvil, transform.position, Quaternion.identity);
 		else
 			Instantiate(PowerUpUseSoundAngel, transform.position, Quaternion.identity);
@@ -99,17 +100,65 @@ public class PlayersManager : MonoBehaviour
 			currentAnimator = ChildEvil.GetComponent<Animator>();
 
 	}
-
+	bool CanJump;
 	void Update()
 	{
+		AnimatorChange(0, 1, 0, 0, 0);
+		if (CanMove)
+		{
+			//Movement
+			Vector3 moveDirection = Vector3.zero;
+			//Run
+			if ((Input.GetKey(KeyCode.LeftArrow) && PlayerNumber == 1) || (Input.GetKey(KeyCode.Q) && PlayerNumber == 2))
+			{
+				if (isGrounded)
+					AnimatorChange(1, 0, 0, 0, 0);
+				moveDirection.x -= (MoveSpeed);
+				lTransform.rotation = Quaternion.Euler(0.0f, 180.0f, 0.0f);
+			}
 
-		if (moveDirection != Vector3.zero)
-			AnimatorChange(1, 0, 0, 0, 0);
-		else
-			AnimatorChange(0, 1, 0, 0, 0);
+			if ((Input.GetKey(KeyCode.RightArrow) && PlayerNumber == 1) || (Input.GetKey(KeyCode.D) && PlayerNumber == 2))
+			{
+				if (isGrounded)
+					AnimatorChange(1, 0, 0, 0, 0);
+				moveDirection.x += MoveSpeed;
+				lTransform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+			}
 
-		if (!isGrounded)
-			AnimatorChange(0, 0, 0, 0, 1);
+			//Jump
+			if ((Input.GetKeyDown(KeyCode.UpArrow) && isGrounded && PositionToSend == "P1"))
+			{
+				AnimatorChange(0, 0, 0, 0, 1);
+				if (moveDirection.x != 0)
+					controller.AddForce(0.0f, JumpHeight * 1.5f, 0.0f, ForceMode.Impulse);
+				else
+					controller.AddForce(0.0f, JumpHeight, 0.0f, ForceMode.Impulse);
+				isGrounded = false;
+			}
+
+			if ((Input.GetKeyDown(KeyCode.Z) && isGrounded && PositionToSend == "P2"))
+			{
+				AnimatorChange(0, 0, 0, 0, 1);
+				if (moveDirection.x != 0)
+					controller.AddForce(0.0f, -JumpHeight * 1.5f, 0.0f, ForceMode.Impulse);
+				else
+					controller.AddForce(0.0f, -JumpHeight, 0.0f, ForceMode.Impulse);
+				isGrounded = false;
+			}
+
+			if (PositionToSend == "P2")
+			{
+				controller.AddForce(-Physics.gravity, ForceMode.Acceleration);
+			}
+			if (PositionToSend == "P1")
+			{
+				controller.AddForce(Physics.gravity, ForceMode.Acceleration);
+			}
+
+			//controller.MovePosition(lTransform.position + moveDirection * Time.deltaTime);
+			lTransform.position = Vector3.Lerp(lTransform.position, lTransform.position + moveDirection, Time.deltaTime);
+
+		}
 
 		currentTimeBetweenFlip -= Time.deltaTime;
 		currentTimeBetweenFlip = Mathf.Max(currentTimeBetweenFlip, 0.0f);
@@ -124,7 +173,7 @@ public class PlayersManager : MonoBehaviour
 		else if (ChildEvil.activeSelf)
 			currentAnimator = ChildEvil.GetComponent<Animator>();
 
-		if ((Input.GetKeyUp(KeyCode.S) && currentTimeBetweenFlip == 0.0f && !Leader) || (Input.GetKeyUp("joystick " + PlayerNumber + " button 1") && currentTimeBetweenFlip == 0.0f && !Leader))
+		if ((Input.GetKeyUp(KeyCode.J) && currentTimeBetweenFlip == 0.0f && !Leader))
 		{
 			currentTimeBetweenFlip = TimeBetweenFlip;
 			PowerUp4();
@@ -259,26 +308,24 @@ public class PlayersManager : MonoBehaviour
 	}
 
 	Vector3 moveDirection = Vector3.zero;
+	Vector3 dir;
 	void FixedUpdate()
 	{
-		if (CanMove)
+		/*if (CanMove)
 		{
-			if (PositionToSend == "P1")
-			{
-				controller.AddForce(Physics.gravity * 20, ForceMode.Acceleration);
-			}
 
+			
 			moveDirection = Vector3.zero;
 
+			HorizontalAxis = Input.GetAxisRaw("Horizontal" + PlayerNumber);
+			dir = Vector3.right * HorizontalAxis;
+
 			//Move-Left-Right
-			float HorizontalAxis = Input.GetAxis("Horizontal" + PlayerNumber);
 			if (HorizontalAxis > 0.0f)
 				transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
 			else
 			if (HorizontalAxis < 0.0f)
 				transform.rotation = Quaternion.Euler(0.0f, 180.0f, 0.0f);
-
-			Vector3 dir = new Vector3(HorizontalAxis, 0.0f, 0.0f);
 
 			if (PlayerNumber == 1 ? Input.GetKey(KeyCode.LeftArrow) : Input.GetKey(KeyCode.Q))
 				dir = new Vector3(-1f, 0.0f, 0.0f);
@@ -288,10 +335,9 @@ public class PlayersManager : MonoBehaviour
 
 			moveDirection = dir;
 
-			//Jump
-			if (Input.GetKey("joystick " + PlayerNumber + " button 0") && isGrounded)
+			if ((Input.GetKeyDown("joystick " + PlayerNumber + " button 0") && isGrounded))
 			{
-
+				CanJump = false;
 				isGrounded = false;
 				if (PlayerNumber == 1)
 				{
@@ -309,17 +355,23 @@ public class PlayersManager : MonoBehaviour
 				}
 			}
 
-			if ((PlayerNumber == 2 && !isGrounded && !GameManager.Current.EvilUP) || (GameManager.Current.EvilUP && PlayerNumber == 1 && !isGrounded))
-			{
-				/*Vector3 gravity =  gravityScale * Vector3.up;
-				moveDirection += gravity;*/
-				controller.AddForce(-Physics.gravity * 20, ForceMode.Acceleration);
-			}
+			
 			//controller.AddForce(gravity, ForceMode.Acceleration);
 			//if (!(controller.velocity.x > MoveSpeed || controller.velocity.x < -MoveSpeed))
 
-			controller.MovePosition(lTransform.position + (moveDirection * MoveSpeed * Time.deltaTime));
-		}
+			
+
+			if(HorizontalAxis != 0)
+			{
+
+				controller.MovePosition(lTransform.position + (moveDirection * MoveSpeed * Time.deltaTime));
+			}
+			else
+			{
+				controller.velocity = Vector3.zero;
+			}
+
+		}*/
 	}
 
 	void AnimatorChange(int Run, int Idle, int CanPowerUpRun, int CanPowerUpIdle, int CanJump)

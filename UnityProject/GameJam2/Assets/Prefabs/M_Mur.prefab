@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4199233047452242074}
   - component: {fileID: 4199233047449342138}
   - component: {fileID: 4199233047450473082}
-  - component: {fileID: 4256203442078540273}
+  - component: {fileID: 1304278934596560238}
   m_Layer: 17
   m_Name: M_Mur
   m_TagString: Untagged
@@ -78,8 +78,8 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &4256203442078540273
-BoxCollider:
+--- !u!136 &1304278934596560238
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -88,6 +88,7 @@ BoxCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1.6138744, y: 2.0245001, z: 1.6138736}
-  m_Center: {x: 0.00000166893, y: 1.0122501, z: 0.015559077}
+  m_Radius: 0.8069372
+  m_Height: 2.77
+  m_Direction: 1
+  m_Center: {x: 0.00000166893, y: 0.88, z: 0.015559077}

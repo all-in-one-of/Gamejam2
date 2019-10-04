@@ -7,6 +7,8 @@ public class CameraController : MonoBehaviour
 {
 	public Vector3 Dir;
 
+	public static bool CameraCanMove = true;
+
 	private Transform lTransform;
 	void Start()
 	{
@@ -15,6 +17,7 @@ public class CameraController : MonoBehaviour
 
 	private void FixedUpdate()
 	{
-		lTransform.position += Dir * Time.deltaTime;
+		if(CameraCanMove)
+			lTransform.position += Dir * Time.deltaTime;
 	}
 }

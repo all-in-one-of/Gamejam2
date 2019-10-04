@@ -11,8 +11,7 @@ GameObject:
   - component: {fileID: 9050607885344752865}
   - component: {fileID: 9050607885346047169}
   - component: {fileID: 9050607885347177985}
-  - component: {fileID: 1477461334722426779}
-  - component: {fileID: 6924484861224324014}
+  - component: {fileID: 5809336107029433523}
   m_Layer: 17
   m_Name: M_Cage
   m_TagString: Untagged
@@ -79,8 +78,8 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &1477461334722426779
-BoxCollider:
+--- !u!135 &5809336107029433523
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -90,17 +89,5 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 3.1248791, y: 2.95, z: 2.97}
-  m_Center: {x: 0, y: 1.72, z: -0.1}
---- !u!114 &6924484861224324014
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9050607885344921793}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3b6869d0e4ed82f48bc7d8515530e25a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Radius: 1.8726652
+  m_Center: {x: 0, y: 1.9522429, z: 0}

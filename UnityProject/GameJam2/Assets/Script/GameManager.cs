@@ -51,7 +51,6 @@ public class GameManager : MonoBehaviour
 	private List<Material> WallP2Mats;
 	private float TimerBeforeRemovingWalls;
 
-
 	[Header("UI")]
 	public GameObject PauseMenu;
 	public GameObject HUD;
@@ -68,6 +67,8 @@ public class GameManager : MonoBehaviour
 	public Image[] ReverseVisualU;
 	public Image[] ReverseVisualD;
 
+	public GameObject[] MainMusic;
+
 	void Start()
 	{
 		current = this;
@@ -78,7 +79,7 @@ public class GameManager : MonoBehaviour
 		worldPivotAnimator = WorldPivot.GetComponent<Animator>();
 
 		Shader.SetGlobalFloat("AppearValue", 0);
-		 GameState = GameState.Initialisation;
+		GameState = GameState.Initialisation;
 	}
 
 	void Update()
@@ -91,11 +92,13 @@ public class GameManager : MonoBehaviour
 					PauseMenu.SetActive(false);
 					HUD.SetActive(true);
 					GameState = GameState.InGame;
+					MainMusic[0].SetActive(true);
+					MainMusic[1].SetActive(false);
+					MainMusic[2].SetActive(false);
 				}
 				break;
 			case GameState.InGame:
 				{
-
 					if (P1.transform.position.x > P2.transform.position.x)
 					{
 						P1Script.Leader = true;
@@ -120,11 +123,17 @@ public class GameManager : MonoBehaviour
 				break;
 			case GameState.AngelWin:
 				{
+					MainMusic[0].SetActive(false);
+					MainMusic[1].SetActive(true);
+					MainMusic[2].SetActive(false);
 					StartCoroutine(WinCoroutine(AngelWin));
 				}
 				break;
 			case GameState.EvilWin:
 				{
+					MainMusic[0].SetActive(false);
+					MainMusic[1].SetActive(false);
+					MainMusic[2].SetActive(true);
 					StartCoroutine(WinCoroutine(EvilWin));
 				}
 				break;
@@ -137,7 +146,7 @@ public class GameManager : MonoBehaviour
 		Time.timeScale = 0.0f;
 		yield return new WaitForSecondsRealtime(2.0f);
 		WinScreens.SetActive(true);
-		WinScreens.GetComponent<Image>().sprite = AngelWin;
+		WinScreens.GetComponent<Image>().sprite = SpriteToShow;
 		yield return new WaitForSecondsRealtime(WinScreenRestTime);
 		ReturnMainMenu();
 
@@ -235,6 +244,7 @@ public class GameManager : MonoBehaviour
 		P2Angel.SetActive(true);
 		P2Evil.SetActive(false);
 
+
 		AngelDownDeco.SetActive(true);
 		AngelUpDeco.SetActive(false);
 		AngelLight.transform.localRotation = Quaternion.Euler(115.0f, 0.0f, 0.0f);
@@ -249,6 +259,7 @@ public class GameManager : MonoBehaviour
 		//Stop Move
 		P1Script.CanMove = false;
 		P2Script.CanMove = false;
+		CameraController.CameraCanMove = false;
 		//Swap controll
 		P1Script.PlayerNumber = 2;
 		P2Script.PlayerNumber = 1;
@@ -256,6 +267,7 @@ public class GameManager : MonoBehaviour
 		worldPivotAnimator.SetInteger("EvilUp", 1);
 		worldPivotAnimator.SetInteger("EvilDown", 0);
 		yield return new WaitForSeconds(1.0f);
+
 
 		//Sprite Swap
 		P1Script.Slot1PowerUp.sprite = EvilRings;
@@ -286,6 +298,7 @@ public class GameManager : MonoBehaviour
 		//Enable Move
 		P1Script.CanMove = true;
 		P2Script.CanMove = true;
+		CameraController.CameraCanMove = true;
 		yield return null;
 		EvilUP = true;
 
@@ -321,6 +334,7 @@ public class GameManager : MonoBehaviour
 		//Stop Move
 		P1Script.CanMove = false;
 		P2Script.CanMove = false;
+		CameraController.CameraCanMove = false;
 		//Swap controll
 		P1Script.PlayerNumber = 1;
 		P2Script.PlayerNumber = 2;
@@ -358,6 +372,7 @@ public class GameManager : MonoBehaviour
 		//Enable Move
 		P1Script.CanMove = true;
 		P2Script.CanMove = true;
+		CameraController.CameraCanMove = true;
 		yield return null;
 		EvilUP = false;
 	}
