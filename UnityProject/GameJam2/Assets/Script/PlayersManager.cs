@@ -104,7 +104,7 @@ public class PlayersManager : MonoBehaviour
 	void Update()
 	{
 		AnimatorChange(0, 1, 0, 0, 0);
-		if (CanMove)
+		/*if (CanMove)
 		{
 			//Movement
 			Vector3 moveDirection = Vector3.zero;
@@ -125,7 +125,7 @@ public class PlayersManager : MonoBehaviour
 				lTransform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
 			}
 
-			//Jump
+			 //Jump
 			if ((Input.GetKeyDown(KeyCode.UpArrow) && isGrounded && PositionToSend == "P1"))
 			{
 				AnimatorChange(0, 0, 0, 0, 1);
@@ -158,7 +158,15 @@ public class PlayersManager : MonoBehaviour
 			//controller.MovePosition(lTransform.position + moveDirection * Time.deltaTime);
 			lTransform.position = Vector3.Lerp(lTransform.position, lTransform.position + moveDirection, Time.deltaTime);
 
-		}
+		}*/
+
+		if (moveDirection != Vector3.zero)
+			AnimatorChange(1, 0, 0, 0, 0);
+		else
+			AnimatorChange(0, 1, 0, 0, 0);
+
+		if (!isGrounded)
+			AnimatorChange(0, 0, 0, 0, 1);
 
 		currentTimeBetweenFlip -= Time.deltaTime;
 		currentTimeBetweenFlip = Mathf.Max(currentTimeBetweenFlip, 0.0f);
@@ -181,7 +189,7 @@ public class PlayersManager : MonoBehaviour
 
 		Shader.SetGlobalVector(PositionToSend, lTransform.position);
 
-		if ((Input.GetKeyDown(KeyCode.A) && PlayerNumber == 2) || (Input.GetKeyDown(KeyCode.Keypad1) && PlayerNumber == 1) || (Input.GetKeyDown("joystick " + PlayerNumber + " button 4")))
+		if ((Input.GetKeyDown(KeyCode.A) && PlayerNumber == 2) || (Input.GetKeyDown(KeyCode.L) && PlayerNumber == 1) || (Input.GetKeyDown("joystick " + PlayerNumber + " button 4")))
 		{
 			if (moveDirection != Vector3.zero)
 				AnimatorChange(0, 0, 1, 0, 0);
@@ -214,7 +222,7 @@ public class PlayersManager : MonoBehaviour
 			}
 			slot1Id = 0;
 		}
-		if ((Input.GetKeyDown(KeyCode.E) && PlayerNumber == 2) || (Input.GetKeyDown(KeyCode.Keypad2) && PlayerNumber == 1) || (Input.GetKeyDown("joystick " + PlayerNumber + " button 5")))
+		if ((Input.GetKeyDown(KeyCode.E) && PlayerNumber == 2) || (Input.GetKeyDown(KeyCode.M) && PlayerNumber == 1) || (Input.GetKeyDown("joystick " + PlayerNumber + " button 5")))
 		{
 			if (moveDirection != Vector3.zero)
 				AnimatorChange(0, 0, 1, 0, 0);
@@ -311,10 +319,10 @@ public class PlayersManager : MonoBehaviour
 	Vector3 dir;
 	void FixedUpdate()
 	{
-		/*if (CanMove)
+		if (CanMove)
 		{
 
-			
+			float HorizontalAxis = Input.GetAxis("Horizontal" + PlayerNumber);
 			moveDirection = Vector3.zero;
 
 			HorizontalAxis = Input.GetAxisRaw("Horizontal" + PlayerNumber);
@@ -335,11 +343,19 @@ public class PlayersManager : MonoBehaviour
 
 			moveDirection = dir;
 
-			if ((Input.GetKeyDown("joystick " + PlayerNumber + " button 0") && isGrounded))
+			if ((Input.GetKeyDown(KeyCode.UpArrow) && PlayerNumber == 1) || (Input.GetKeyDown(KeyCode.Z) && PlayerNumber == 2))
 			{
-				CanJump = false;
+				//CanJump = false;
 				isGrounded = false;
-				if (PlayerNumber == 1)
+				if (PositionToSend == "P1")
+				{
+					controller.AddForce(Vector3.up * JumpHeight, ForceMode.Impulse);
+				}
+				else
+				{
+					controller.AddForce(Vector3.down * JumpHeight, ForceMode.Impulse);
+				}
+				/*if (PlayerNumber == 1)
 				{
 					if (GameManager.Current.EvilUP)
 						controller.AddForce(Vector3.down * JumpHeight, ForceMode.Impulse);
@@ -352,26 +368,33 @@ public class PlayersManager : MonoBehaviour
 						controller.AddForce(Vector3.up * JumpHeight, ForceMode.Impulse);
 					else
 						controller.AddForce(Vector3.down * JumpHeight, ForceMode.Impulse);
-				}
+				}*/
 			}
 
-			
 			//controller.AddForce(gravity, ForceMode.Acceleration);
 			//if (!(controller.velocity.x > MoveSpeed || controller.velocity.x < -MoveSpeed))
 
-			
+			if (PositionToSend == "P2")
+			{
+				controller.AddForce(-Physics.gravity * 20, ForceMode.Acceleration);
+			}
+			if (PositionToSend == "P1")
+			{
+				controller.AddForce(Physics.gravity * 20, ForceMode.Acceleration);
+			}
 
-			if(HorizontalAxis != 0)
+			controller.MovePosition(lTransform.position + (moveDirection * MoveSpeed * Time.deltaTime));
+
+			/* if(HorizontalAxis != 0)
 			{
 
-				controller.MovePosition(lTransform.position + (moveDirection * MoveSpeed * Time.deltaTime));
 			}
 			else
 			{
 				controller.velocity = Vector3.zero;
-			}
+			}*/
 
-		}*/
+		}
 	}
 
 	void AnimatorChange(int Run, int Idle, int CanPowerUpRun, int CanPowerUpIdle, int CanJump)
