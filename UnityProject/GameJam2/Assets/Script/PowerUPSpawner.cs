@@ -14,6 +14,10 @@ public class PowerUPSpawner : MonoBehaviour
 	public float DieAfter;
 	private float currentTime;
 
+
+	public Vector3 moveDir;
+
+
 	void Start()
 	{
 		currentTime = Random.Range(MinTime,MaxTime);
@@ -28,6 +32,7 @@ public class PowerUPSpawner : MonoBehaviour
 			currentTime =  Random.Range(MinTime,MaxTime);
 		}
 
+		transform.position += moveDir * Time.deltaTime;
 	}
 
 	int previousindex = 0;

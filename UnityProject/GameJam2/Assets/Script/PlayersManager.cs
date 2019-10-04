@@ -52,8 +52,30 @@ public class PlayersManager : MonoBehaviour
 	public GameObject ChildAngel;
 	public GameObject ChildEvil;
 
+	public GameObject PowerUpTakeSoundAngel;
+	public GameObject PowerUpTakeSoundEvil;
+	public GameObject PowerUpUseSoundAngel;
+	public GameObject PowerUpUseSoundEvil;
+
+	void TakePowerSound()
+	{
+		if (GameManager.Current.EvilUP && PositionToSend == "P1")
+			Instantiate(PowerUpTakeSoundEvil, transform.position, Quaternion.identity);
+		else
+			Instantiate(PowerUpTakeSoundAngel, transform.position, Quaternion.identity);
+	}
+
+	void UsePowerSound()
+	{
+		if (GameManager.Current.EvilUP && PositionToSend == "P1")
+			Instantiate(PowerUpUseSoundEvil, transform.position, Quaternion.identity);
+		else
+			Instantiate(PowerUpUseSoundAngel, transform.position, Quaternion.identity);
+	}
+
 	void Start()
 	{
+
 		lGameObject = gameObject;
 		lTransform = transform;
 
@@ -86,7 +108,7 @@ public class PlayersManager : MonoBehaviour
 		else
 			AnimatorChange(0, 1, 0, 0, 0);
 
-		if(!isGrounded)
+		if (!isGrounded)
 			AnimatorChange(0, 0, 0, 0, 1);
 
 		currentTimeBetweenFlip -= Time.deltaTime;
@@ -181,6 +203,7 @@ public class PlayersManager : MonoBehaviour
 	//WallPlacing
 	void PowerUp1()
 	{
+		UsePowerSound();
 		GameManager.Current.WallPlacingActivate(PlayerNumber);
 	}
 
@@ -188,6 +211,7 @@ public class PlayersManager : MonoBehaviour
 	//WallThrough
 	void PowerUp2()
 	{
+		UsePowerSound();
 		RaycastHit[] hits;
 		hits = Physics.RaycastAll(transform.position, transform.right, 20, WallLvalue);
 
@@ -216,12 +240,14 @@ public class PlayersManager : MonoBehaviour
 	//Slow 
 	void PowerUp3()
 	{
-		StartCoroutine(GameManager.Current.SlowPlayer(PlayerNumber));
+		UsePowerSound();
+		StartCoroutine(GameManager.Current.SlowPlayer(PositionToSend));
 	}
 
 	//inverseWorld
 	void PowerUp4()
 	{
+		UsePowerSound();
 		if (GameManager.Current.EvilUP)
 		{
 			StartCoroutine(GameManager.Current.GoToEvilDown());
@@ -265,7 +291,7 @@ public class PlayersManager : MonoBehaviour
 			//Jump
 			if (Input.GetKey("joystick " + PlayerNumber + " button 0") && isGrounded)
 			{
-				
+
 				isGrounded = false;
 				if (PlayerNumber == 1)
 				{
@@ -329,21 +355,25 @@ public class PlayersManager : MonoBehaviour
 
 		if (col.CompareTag("PowerUp1"))
 		{
+			TakePowerSound();
 			ShowPowerUpInUI(PowerUpSprite[0], col, 1);
 		}
 
 		if (col.CompareTag("PowerUp2"))
 		{
+			TakePowerSound();
 			ShowPowerUpInUI(PowerUpSprite[1], col, 2);
 		}
 
 		if (col.CompareTag("PowerUp3") && !Leader)
 		{
+			TakePowerSound();
 			ShowPowerUpInUI(PowerUpSprite[2], col, 3);
 		}
 
 		if (col.CompareTag("PowerUp4"))
 		{
+			TakePowerSound();
 			ShowPowerUpInUI(PowerUpSprite[3], col, 4);
 		}
 	}

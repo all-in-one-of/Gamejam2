@@ -31,6 +31,7 @@ public class MenuManager : MonoBehaviour
 
 	void Start()
 	{
+		Time.timeScale = 1;
 		//SetDefaultResolution();
 
 		//SetDefaultVideoSettings();
@@ -150,6 +151,7 @@ public class MenuManager : MonoBehaviour
 	IEnumerator LoadingScreen(int sceneIndex)
 	{
 		yield return new WaitForSeconds(1.0f);
+		StopAllCoroutines();
 		SceneManager.LoadScene(sceneIndex);
 	}
 

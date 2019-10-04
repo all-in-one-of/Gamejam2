@@ -55,7 +55,7 @@ Shader "GJ2/Evil"
 }
 /*ASEBEGIN
 Version=16900
-0;577;1129;463;1194.766;108.1846;1.3;True;False
+0;632;1178;368;1226.616;46.4346;1.3;True;False
 Node;AmplifyShaderEditor.SamplerNode;4;-731.7375,208.8462;Float;True;Property;_T_Evil_SME;T_Evil_SME;3;0;Create;True;0;0;False;0;f9895bedfd00e7b48b66acd0a574df13;f9895bedfd00e7b48b66acd0a574df13;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;6;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 Node;AmplifyShaderEditor.StepOpNode;8;-412.0778,328.0139;Float;False;2;0;FLOAT;0;False;1;FLOAT;0.25;False;1;FLOAT;0
 Node;AmplifyShaderEditor.OneMinusNode;9;-212.0778,325.0139;Float;False;1;0;FLOAT;0;False;1;FLOAT;0
@@ -76,4 +76,4 @@ WireConnection;0;2;5;0
 WireConnection;0;3;4;2
 WireConnection;0;4;4;1
 ASEEND*/
-//CHKSM=E1C1547195B3B719A29D41C658B27661EEBFF74F
+//CHKSM=822A1EDC753C3B8582D275247A8B272B56C59BDB

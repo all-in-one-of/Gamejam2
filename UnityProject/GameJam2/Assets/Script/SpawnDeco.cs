@@ -11,6 +11,7 @@ public class SpawnDeco : MonoBehaviour
 	public Transform parent;
 	public Vector3 ScaleVector;
 	public bool Angel;
+	public bool Obstacle;
 
 	public int NumberSpawn;
 
@@ -29,11 +30,27 @@ public class SpawnDeco : MonoBehaviour
 
 		for (int i = 0; i < RandomPosition.Count; i++)
 		{
+			if (Obstacle)
+			{
+				Vector3 ee;
+				ee = RandomPosition[i];
+				ee.y = 0.0f;
+				RandomPosition[i] = ee;
+			}
 			while (randomIndex == previousindex)
 			{
 				randomIndex = Random.Range(0, Prefabs.Length);
 			}
-			GameObject temp = Instantiate(Prefabs[randomIndex], RandomPosition[i] + (Angel? Vector3.up * .25f : Vector3.zero), Quaternion.identity);
+			Vector3 OffsetPos = Vector3.zero;
+			if (Angel)
+				OffsetPos = Vector3.up * .25f;
+			else if (!Angel)
+				OffsetPos = Vector3.zero;
+			GameObject temp = Instantiate(Prefabs[randomIndex], RandomPosition[i] + OffsetPos, Quaternion.identity);
+			if (Obstacle && Prefabs[randomIndex] == Prefabs[1])
+			{
+				temp.transform.position = new Vector3(temp.transform.position.x, -.5f, 0.0f);
+			}
 			if (Angel && Prefabs[randomIndex] == Prefabs[1])
 			{
 				if (parent.gameObject.name == "AngelDown")

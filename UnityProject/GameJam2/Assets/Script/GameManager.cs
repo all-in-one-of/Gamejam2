@@ -51,14 +51,11 @@ public class GameManager : MonoBehaviour
 	private List<Material> WallP2Mats;
 	private float TimerBeforeRemovingWalls;
 
-	[Header("WinFinish")]
-	public GameObject FinishAngel;
 
 	[Header("UI")]
 	public GameObject PauseMenu;
 	public GameObject HUD;
 	public GameObject WinScreens;
-	public GameObject Win;
 	public Sprite AngelWin;
 	public Sprite EvilWin;
 	public float WinScreenRestTime;
@@ -81,6 +78,7 @@ public class GameManager : MonoBehaviour
 		worldPivotAnimator = WorldPivot.GetComponent<Animator>();
 
 		Shader.SetGlobalFloat("AppearValue", 0);
+		 GameState = GameState.Initialisation;
 	}
 
 	void Update()
@@ -90,7 +88,6 @@ public class GameManager : MonoBehaviour
 			case GameState.Initialisation:
 				{
 					WinScreens.SetActive(false);
-					Win.SetActive(false);
 					PauseMenu.SetActive(false);
 					HUD.SetActive(true);
 					GameState = GameState.InGame;
@@ -123,28 +120,24 @@ public class GameManager : MonoBehaviour
 				break;
 			case GameState.AngelWin:
 				{
-					StartCoroutine(AngelWinCoroutine());
+					StartCoroutine(WinCoroutine(AngelWin));
 				}
 				break;
 			case GameState.EvilWin:
 				{
-					WinScreens.SetActive(true);
-					Win.SetActive(true);
-					Win.GetComponent<Image>().sprite = EvilWin;
-					Time.timeScale = 0.0f;
+					StartCoroutine(WinCoroutine(EvilWin));
 				}
 				break;
 		}
 	}
 
-	IEnumerator AngelWinCoroutine()
+	IEnumerator WinCoroutine(Sprite SpriteToShow)
 	{
+		HUD.SetActive(false);
 		Time.timeScale = 0.0f;
-		FinishAngel.SetActive(true);
 		yield return new WaitForSecondsRealtime(2.0f);
 		WinScreens.SetActive(true);
-		Win.SetActive(true);
-		Win.GetComponent<Image>().sprite = AngelWin;
+		WinScreens.GetComponent<Image>().sprite = AngelWin;
 		yield return new WaitForSecondsRealtime(WinScreenRestTime);
 		ReturnMainMenu();
 
@@ -197,9 +190,9 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
-	public IEnumerator SlowPlayer(int PlayerNum)
+	public IEnumerator SlowPlayer(string PlayerNum)
 	{
-		if (PlayerNum == 1)
+		if (PlayerNum == "P1")
 		{
 			if (EvilUP)
 				SlowEffects[3].SetActive(true);
